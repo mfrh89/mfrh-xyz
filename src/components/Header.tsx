@@ -23,7 +23,7 @@ function ProfileImage({ profileImage, name, className }: { profileImage: string 
   }
   return (
     <div className={`flex items-center justify-center rounded-full bg-neutral-300 text-sm font-bold text-neutral-500 ${className}`}>
-      {name.split(' ').map((n) => n[0]).join('')}
+      {(name || '').split(' ').map((n) => n[0]).join('')}
     </div>
   )
 }

@@ -36,7 +36,7 @@ export function ExperienceSection({ experience }: ExperienceSectionProps) {
 
             {/* Bullet points */}
             <ul className="space-y-2">
-              {job.description.split('\n').map((point, j) => {
+              {(job.description || '').split('\n').map((point, j) => {
                 const trimmed = point.trim()
                 if (!trimmed) return null
                 return (
