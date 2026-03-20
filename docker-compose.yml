@@ -4,6 +4,8 @@ services:
     restart: unless-stopped
     ports:
       - "${CV_PORT:-3000}:3000"
+    volumes:
+      - media:/app/media
     environment:
       - DATABASE_URI=postgresql://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-payload}
       - PAYLOAD_SECRET=${PAYLOAD_SECRET}
@@ -29,3 +31,4 @@ services:
 
 volumes:
   pgdata:
+  media:

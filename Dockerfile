@@ -45,6 +45,9 @@ COPY --chown=nextjs:nodejs db/init.sql db/push-schema.mjs ./db/
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
+# Writable media directory for uploads
+RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
+
 USER nextjs
 
 EXPOSE 3000
