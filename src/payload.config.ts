@@ -137,6 +137,13 @@ export default buildConfig({
     meta: {
       titleSuffix: ' | MFRH CV',
     },
+    livePreview: {
+      url: ({ globalConfig }) =>
+        globalConfig?.slug === 'cover-letter'
+          ? `${serverUrl}/cover-letter`
+          : serverUrl,
+      globals: ['cv', 'cover-letter'],
+    },
   },
 
   collections: [
