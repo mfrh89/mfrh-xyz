@@ -1,5 +1,7 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { LiveCV } from '@/components/live/LiveCV'
 import { LiveCoverLetter } from '@/components/live/LiveCoverLetter'
 
@@ -7,11 +9,33 @@ type Props = {
   searchParams: Promise<{ global?: string }>
 }
 
-// Auth is handled at network level (Caddy LAN/Tailscale restriction)
 export default async function PreviewPage({ searchParams }: Props) {
   const { global: globalSlug } = await searchParams
 
   const payload = await getPayload({ config: configPromise })
+
+  // Auth check: read the payload-token cookie directly
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+
+  if (!token) {
+    console.log('[preview] No payload-token cookie found, redirecting to login')
+    redirect('/admin/login')
+  }
+
+  try {
+    const { user } = await payload.auth({
+      headers: new Headers({ Authorization: `JWT ${token}` }),
+    })
+    if (!user) {
+      console.log('[preview] Token present but no user found')
+      redirect('/admin/login')
+    }
+  } catch (err) {
+    console.error('[preview] Auth error:', err)
+    redirect('/admin/login')
+  }
+
   const serverURL = process.env.SERVER_URL || 'http://localhost:3000'
 
   if (globalSlug === 'cover-letter') {
