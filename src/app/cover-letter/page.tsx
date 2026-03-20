@@ -1,29 +1,13 @@
-import { reader } from '@/lib/reader'
+import { getCV, getCoverLetter } from '@/lib/payload'
 import { Header } from '@/components/Header'
 import { PrintButton } from '@/components/PrintButton'
 import Link from 'next/link'
 
 export default async function CoverLetterPage() {
-  const cv = await reader.singletons.cv.read()
-  const letter = await reader.singletons.coverLetter.read()
+  const cv = await getCV()
+  const letter = await getCoverLetter()
 
-  if (!cv || !letter) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold">No content yet</h1>
-          <p className="mb-4 text-gray-500">
-            Add your CV and cover letter content in the admin panel.
-          </p>
-          <a href="/keystatic" className="text-blue-600 underline hover:text-blue-800">
-            Open Keystatic Admin &rarr;
-          </a>
-        </div>
-      </div>
-    )
-  }
-
-  const paragraphs = letter.body.split('\n\n').filter((p: string) => p.trim())
+  const paragraphs = (letter.body || '').split('\n\n').filter((p: string) => p.trim())
 
   return (
     <>
@@ -35,9 +19,6 @@ export default async function CoverLetterPage() {
         <Link href="/cover-letter" className="text-xs font-bold text-[var(--color-text)] underline underline-offset-4">
           Anschreiben
         </Link>
-        <a href="/keystatic" className="ml-4 rounded border border-gray-300 px-3 py-1 text-[10px] text-gray-500 hover:border-gray-500 hover:text-gray-700">
-          CMS
-        </a>
       </nav>
 
       {/* Cover Letter Page */}
@@ -45,12 +26,12 @@ export default async function CoverLetterPage() {
         <div className="cover-letter-page flex w-[260mm] min-h-[297mm] flex-col print:w-[210mm] print:shadow-none">
           {/* ── Full-width Header (same as CV) ── */}
           <Header
-            name={cv.name}
-            title={cv.title}
-            email={cv.email}
-            phone={cv.phone}
-            linkedin={cv.linkedin}
-            profileImage={cv.profileImage}
+            name={cv.name || ''}
+            title={cv.title || ''}
+            email={cv.email || ''}
+            phone={cv.phone || ''}
+            linkedin={cv.linkedin || ''}
+            profileImage={typeof cv.profileImage === 'object' && cv.profileImage?.url ? cv.profileImage.url : null}
           />
 
           {/* Content */}
