@@ -121,6 +121,7 @@ const CoverLetter: GlobalConfig = {
 
 // ── Payload Config ──────────────────────────────────────
 export default buildConfig({
+  serverURL: serverUrl,
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-in-production',
 
   db: postgresAdapter({
