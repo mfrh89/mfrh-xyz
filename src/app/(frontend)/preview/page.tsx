@@ -32,7 +32,7 @@ export default async function PreviewPage({ searchParams }: Props) {
     return (
       <>
         <div className="bg-yellow-500 text-black text-center py-2 text-sm font-bold print-hidden">
-          PREVIEW - Draft-Version (nicht veröffentlicht)
+          PREVIEW - Draft-Version
         </div>
         <LiveCoverLetter
           initialData={{
