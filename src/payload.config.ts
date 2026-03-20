@@ -28,7 +28,7 @@ const CV: GlobalConfig = {
   label: 'CV',
   versions: { drafts: true },
   admin: {
-    preview: () => serverUrl,
+    preview: () => `${serverUrl}/preview?global=cv`,
   },
   fields: [
     { name: 'name', type: 'text', label: 'Full Name', required: true },
@@ -109,7 +109,7 @@ const CoverLetter: GlobalConfig = {
   label: 'Cover Letter (Anschreiben)',
   versions: { drafts: true },
   admin: {
-    preview: () => `${serverUrl}/cover-letter`,
+    preview: () => `${serverUrl}/preview?global=cover-letter`,
   },
   fields: [
     { name: 'recipientSalutation', type: 'text', label: 'Salutation (e.g. Sehr geehrtes ... Team)' },
@@ -141,8 +141,8 @@ export default buildConfig({
     livePreview: {
       url: ({ globalConfig }) =>
         globalConfig?.slug === 'cover-letter'
-          ? `${serverUrl}/cover-letter`
-          : serverUrl,
+          ? `${serverUrl}/preview?global=cover-letter`
+          : `${serverUrl}/preview?global=cv`,
       globals: ['cv', 'cover-letter'],
     },
   },
