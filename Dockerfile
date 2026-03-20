@@ -29,7 +29,10 @@ RUN npm ci --omit=dev
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+# NODE_ENV is set to "development" so Payload's push: true
+# auto-creates/syncs DB tables on startup. The Next.js build
+# output is already production-optimized at build time.
+ENV NODE_ENV=development
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
