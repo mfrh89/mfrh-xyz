@@ -5,7 +5,6 @@ services:
     ports:
       - "${CV_PORT:-3000}:3000"
     environment:
-      - NODE_ENV=production
       - DATABASE_URI=postgresql://${POSTGRES_USER:-payload}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-payload}
       - PAYLOAD_SECRET=${PAYLOAD_SECRET}
     depends_on:

@@ -29,10 +29,7 @@ RUN npm ci --omit=dev
 FROM base AS runner
 WORKDIR /app
 
-# NODE_ENV is set to "development" so Payload's push: true
-# auto-creates/syncs DB tables on startup. The Next.js build
-# output is already production-optimized at build time.
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -43,10 +40,15 @@ COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/package.json ./
 COPY --from=prod-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+# DB schema init script
+COPY --chown=nextjs:nodejs db/init.sql db/push-schema.mjs ./db/
+COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
 USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["npx", "next", "start"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
