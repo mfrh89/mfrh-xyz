@@ -23,6 +23,7 @@ interface SidebarProps {
 }
 
 export function AboutSection({ summary }: { summary: string }) {
+  if (!summary) return null
   return (
     <div>
       <SectionTitle id="about">Über Mich</SectionTitle>
