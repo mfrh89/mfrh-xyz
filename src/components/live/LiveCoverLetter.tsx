@@ -17,6 +17,7 @@ type CVData = {
   phone: string
   linkedin: string
   profileImage: { url?: string } | string | null
+  logo: { url?: string } | string | null
 }
 
 export function LiveCoverLetter({
@@ -47,6 +48,7 @@ export function LiveCoverLetter({
           phone={cvData.phone || ''}
           linkedin={cvData.linkedin || ''}
           profileImage={profileImage}
+          logo={typeof cvData.logo === 'object' && cvData.logo?.url ? cvData.logo.url : null}
         />
 
         <div className="flex-1 px-6 pb-6 pt-5">

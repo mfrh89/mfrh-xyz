@@ -43,6 +43,7 @@ CREATE TABLE public._cv_v (
     version_phone character varying,
     version_linkedin character varying,
     version_profile_image_id integer,
+    version_logo_id integer,
     version_summary character varying,
     version_skill_max_dots numeric DEFAULT 5,
     version__status public.enum__cv_v_version_status DEFAULT 'draft'::public.enum__cv_v_version_status,
@@ -174,6 +175,7 @@ CREATE TABLE public.cv (
     phone character varying,
     linkedin character varying,
     profile_image_id integer,
+    logo_id integer,
     summary character varying,
     skill_max_dots numeric DEFAULT 5,
     updated_at timestamp(3) with time zone,
@@ -451,6 +453,7 @@ CREATE INDEX _cv_v_version_skills_order_idx ON public._cv_v_version_skills USING
 CREATE INDEX _cv_v_version_skills_parent_id_idx ON public._cv_v_version_skills USING btree (_parent_id);
 CREATE INDEX _cv_v_version_version__status_idx ON public._cv_v USING btree (version__status);
 CREATE INDEX _cv_v_version_version_profile_image_idx ON public._cv_v USING btree (version_profile_image_id);
+CREATE INDEX _cv_v_version_version_logo_idx ON public._cv_v USING btree (version_logo_id);
 CREATE INDEX cover_letter__status_idx ON public.cover_letter USING btree (_status);
 CREATE INDEX cv__status_idx ON public.cv USING btree (_status);
 CREATE INDEX cv_certificates_order_idx ON public.cv_certificates USING btree (_order);
@@ -462,6 +465,7 @@ CREATE INDEX cv_experience_parent_id_idx ON public.cv_experience USING btree (_p
 CREATE INDEX cv_languages_order_idx ON public.cv_languages USING btree (_order);
 CREATE INDEX cv_languages_parent_id_idx ON public.cv_languages USING btree (_parent_id);
 CREATE INDEX cv_profile_image_idx ON public.cv USING btree (profile_image_id);
+CREATE INDEX cv_logo_idx ON public.cv USING btree (logo_id);
 CREATE INDEX cv_skills_order_idx ON public.cv_skills USING btree (_order);
 CREATE INDEX cv_skills_parent_id_idx ON public.cv_skills USING btree (_parent_id);
 CREATE INDEX media_created_at_idx ON public.media USING btree (created_at);
@@ -500,6 +504,8 @@ ALTER TABLE ONLY public._cv_v_version_languages
     ADD CONSTRAINT _cv_v_version_languages_parent_id_fk FOREIGN KEY (_parent_id) REFERENCES public._cv_v(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public._cv_v
     ADD CONSTRAINT _cv_v_version_profile_image_id_media_id_fk FOREIGN KEY (version_profile_image_id) REFERENCES public.media(id) ON DELETE SET NULL;
+ALTER TABLE ONLY public._cv_v
+    ADD CONSTRAINT _cv_v_version_logo_id_media_id_fk FOREIGN KEY (version_logo_id) REFERENCES public.media(id) ON DELETE SET NULL;
 ALTER TABLE ONLY public._cv_v_version_skills
     ADD CONSTRAINT _cv_v_version_skills_parent_id_fk FOREIGN KEY (_parent_id) REFERENCES public._cv_v(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public.cv_certificates
@@ -512,6 +518,8 @@ ALTER TABLE ONLY public.cv_languages
     ADD CONSTRAINT cv_languages_parent_id_fk FOREIGN KEY (_parent_id) REFERENCES public.cv(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public.cv
     ADD CONSTRAINT cv_profile_image_id_media_id_fk FOREIGN KEY (profile_image_id) REFERENCES public.media(id) ON DELETE SET NULL;
+ALTER TABLE ONLY public.cv
+    ADD CONSTRAINT cv_logo_id_media_id_fk FOREIGN KEY (logo_id) REFERENCES public.media(id) ON DELETE SET NULL;
 ALTER TABLE ONLY public.cv_skills
     ADD CONSTRAINT cv_skills_parent_id_fk FOREIGN KEY (_parent_id) REFERENCES public.cv(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public.payload_locked_documents_rels

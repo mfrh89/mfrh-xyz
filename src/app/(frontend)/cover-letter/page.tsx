@@ -35,6 +35,7 @@ export default async function CoverLetterPage() {
             phone={cv.phone || ''}
             linkedin={cv.linkedin || ''}
             profileImage={typeof cv.profileImage === 'object' && cv.profileImage?.url ? cv.profileImage.url : null}
+            logo={typeof cv.logo === 'object' && cv.logo?.url ? cv.logo.url : null}
           />
 
           {/* Content */}
