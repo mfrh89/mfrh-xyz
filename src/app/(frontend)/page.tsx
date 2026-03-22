@@ -46,8 +46,8 @@ export default async function CVPage() {
             email={cv.email || ''}
             phone={cv.phone || ''}
             linkedin={cv.linkedin || ''}
-            profileImage={typeof cv.profileImage === 'object' && cv.profileImage?.url ? cv.profileImage.url : null}
-            logo={typeof cv.logo === 'object' && cv.logo?.url ? cv.logo.url : null}
+            profileImage={typeof cv.profileImage === 'object' && cv.profileImage?.url ? new URL(cv.profileImage.url, process.env.SERVER_URL).pathname : null}
+            logo={typeof cv.logo === 'object' && cv.logo?.url ? new URL(cv.logo.url, process.env.SERVER_URL).pathname : null}
           />
 
           {/* ── Mobile: single column ── */}

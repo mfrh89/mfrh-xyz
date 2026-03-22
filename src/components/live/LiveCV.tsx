@@ -38,8 +38,8 @@ export function LiveCV({ initialData, serverURL }: { initialData: CVData; server
     certificates: (cv.certificates || []).map((c) => ({ name: c.name || '', issuer: c.issuer || '', date: c.date || '', status: c.status || '' })),
   }
 
-  const profileImage = typeof cv.profileImage === 'object' && cv.profileImage?.url ? cv.profileImage.url : null
-  const logo = typeof cv.logo === 'object' && cv.logo?.url ? cv.logo.url : null
+  const profileImage = typeof cv.profileImage === 'object' && cv.profileImage?.url ? new URL(cv.profileImage.url, serverURL).pathname : null
+  const logo = typeof cv.logo === 'object' && cv.logo?.url ? new URL(cv.logo.url, serverURL).pathname : null
 
   return (
     <main className="flex justify-center py-8 print:py-0">

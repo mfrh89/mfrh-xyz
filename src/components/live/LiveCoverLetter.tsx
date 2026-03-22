@@ -36,7 +36,7 @@ export function LiveCoverLetter({
   })
 
   const paragraphs = (letter.body || '').split('\n\n').filter((p: string) => p.trim())
-  const profileImage = typeof cvData.profileImage === 'object' && cvData.profileImage?.url ? cvData.profileImage.url : null
+  const profileImage = typeof cvData.profileImage === 'object' && cvData.profileImage?.url ? new URL(cvData.profileImage.url, serverURL).pathname : null
 
   return (
     <main className="flex justify-center py-8 print:py-0">
@@ -48,7 +48,7 @@ export function LiveCoverLetter({
           phone={cvData.phone || ''}
           linkedin={cvData.linkedin || ''}
           profileImage={profileImage}
-          logo={typeof cvData.logo === 'object' && cvData.logo?.url ? cvData.logo.url : null}
+          logo={typeof cvData.logo === 'object' && cvData.logo?.url ? new URL(cvData.logo.url, serverURL).pathname : null}
         />
 
         <div className="flex-1 px-6 pb-6 pt-5">
