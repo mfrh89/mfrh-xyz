@@ -7,6 +7,7 @@ interface HeaderProps {
   phone: string
   linkedin: string
   profileImage: string | null
+  logo: string | null
 }
 
 function ProfileImage({ profileImage, name, className }: { profileImage: string | null; name: string; className: string }) {
@@ -28,11 +29,22 @@ function ProfileImage({ profileImage, name, className }: { profileImage: string 
   )
 }
 
-export function Header({ name, title, email, phone, linkedin, profileImage }: HeaderProps) {
+export function Header({ name, title, email, phone, linkedin, profileImage, logo }: HeaderProps) {
   return (
     <header className="px-4 py-6 md:px-6 md:py-8">
-      {/* Desktop layout: single row — name/title | photo | contact */}
+      {/* Desktop layout: logo | name/title | photo | contact */}
       <div className="hidden md:flex items-center gap-6">
+        {/* Logo */}
+        {logo && (
+          <Image
+            src={logo}
+            alt="Logo"
+            width={120}
+            height={60}
+            className="h-[54px] w-auto object-contain"
+          />
+        )}
+
         {/* Left: Name + Title */}
         <div className="flex-1">
           <h1 className="text-[28px] font-bold tracking-[0.05em] uppercase text-[var(--color-text)]">
@@ -70,6 +82,17 @@ export function Header({ name, title, email, phone, linkedin, profileImage }: He
 
       {/* Mobile layout */}
       <div className="flex flex-col md:hidden">
+        {/* Logo on mobile */}
+        {logo && (
+          <Image
+            src={logo}
+            alt="Logo"
+            width={80}
+            height={40}
+            className="h-[36px] w-auto object-contain mb-3"
+          />
+        )}
+
         <h1 className="text-[22px] font-bold tracking-[0.05em] uppercase text-[var(--color-text)]">
           {name}
         </h1>

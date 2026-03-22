@@ -37,6 +37,7 @@ const CV: GlobalConfig = {
     { name: 'phone', type: 'text', label: 'Phone' },
     { name: 'linkedin', type: 'text', label: 'LinkedIn (e.g. linkedin.com/in/mfrh)' },
     { name: 'profileImage', type: 'upload', relationTo: 'media', label: 'Profile Photo' },
+    { name: 'logo', type: 'upload', relationTo: 'media', label: 'Logo' },
     { name: 'summary', type: 'textarea', label: 'About Me (Über Mich)' },
     {
       name: 'experience',

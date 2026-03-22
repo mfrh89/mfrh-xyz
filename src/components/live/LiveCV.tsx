@@ -12,6 +12,7 @@ type CVData = {
   phone: string
   linkedin: string
   profileImage: { url?: string } | string | null
+  logo: { url?: string } | string | null
   summary: string
   skillMaxDots: number
   skills: { name: string; level: number }[]
@@ -38,6 +39,7 @@ export function LiveCV({ initialData, serverURL }: { initialData: CVData; server
   }
 
   const profileImage = typeof cv.profileImage === 'object' && cv.profileImage?.url ? cv.profileImage.url : null
+  const logo = typeof cv.logo === 'object' && cv.logo?.url ? cv.logo.url : null
 
   return (
     <main className="flex justify-center py-8 print:py-0">
@@ -49,6 +51,7 @@ export function LiveCV({ initialData, serverURL }: { initialData: CVData; server
           phone={cv.phone || ''}
           linkedin={cv.linkedin || ''}
           profileImage={profileImage}
+          logo={logo}
         />
 
         <div className="flex flex-col px-4 pb-6 pt-5 md:hidden">
