@@ -4,10 +4,9 @@ import { withPayload } from "@payloadcms/next/withPayload";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
-    remotePatterns: [
+    localPatterns: [
       {
-        protocol: "https",
-        hostname: "cv.mfrh.xyz",
+        pathname: "/api/media/file/**",
       },
     ],
   },
