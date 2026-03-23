@@ -41,7 +41,7 @@ export function LiveCoverLetter({
 
   return (
     <main className="flex justify-center py-8 print:py-0">
-      <div className="cover-letter-page flex w-[260mm] min-h-[297mm] flex-col print:w-[210mm] print:shadow-none">
+      <div className="cover-letter-page flex w-full max-w-[260mm] min-h-[297mm] flex-col print:w-[210mm] print:shadow-none">
         <Header
           name={cvData.name || ''}
           title={cvData.title || ''}
