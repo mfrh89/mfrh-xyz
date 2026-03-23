@@ -120,6 +120,7 @@ function randomToken(): string {
 const CoverLetters: CollectionConfig = {
   slug: 'cover-letters',
   labels: { singular: 'Cover Letter', plural: 'Cover Letters' },
+  versions: { drafts: true },
   admin: {
     useAsTitle: 'company',
     defaultColumns: ['company', 'role'],
