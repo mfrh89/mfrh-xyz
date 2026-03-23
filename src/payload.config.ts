@@ -120,9 +120,9 @@ function randomToken(): string {
 const CoverLetters: CollectionConfig = {
   slug: 'cover-letters',
   labels: { singular: 'Cover Letter', plural: 'Cover Letters' },
-  versions: { drafts: true },
   admin: {
     useAsTitle: 'company',
+    defaultColumns: ['company', 'role'],
     description: 'Per-application cover letters. Share the token URL with employers.',
   },
   hooks: {
@@ -140,9 +140,10 @@ const CoverLetters: CollectionConfig = {
       name: 'token',
       type: 'text',
       label: 'URL Token',
-      required: true,
       unique: true,
-      admin: { description: 'Auto-generated 6-char token used in the public URL (e.g. /cover-letter/a7f3k9)' },
+      admin: {
+        hidden: true,
+      },
     },
     { name: 'company', type: 'text', label: 'Company', required: true },
     { name: 'role', type: 'text', label: 'Role / Job Title', required: true },
