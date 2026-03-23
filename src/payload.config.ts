@@ -107,6 +107,43 @@ const CV: GlobalConfig = {
   ],
 }
 
+// ── Cover Letters Collection ─────────────────────────────
+function randomToken(): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < 6; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return result
+}
+
+const CoverLetters: CollectionConfig = {
+  slug: 'cover-letters',
+  labels: { singular: 'Cover Letter', plural: 'Cover Letters' },
+  versions: { drafts: true },
+  admin: {
+    useAsTitle: 'company',
+    description: 'Per-application cover letters. Share the token URL with employers.',
+  },
+  fields: [
+    {
+      name: 'token',
+      type: 'text',
+      label: 'URL Token',
+      required: true,
+      unique: true,
+      defaultValue: () => randomToken(),
+      admin: { description: 'Auto-generated 6-char token used in the public URL (e.g. /cover-letter/a7f3k9)' },
+    },
+    { name: 'company', type: 'text', label: 'Company', required: true },
+    { name: 'role', type: 'text', label: 'Role / Job Title', required: true },
+    { name: 'recipientSalutation', type: 'text', label: 'Salutation (e.g. Sehr geehrtes ... Team)' },
+    { name: 'body', type: 'textarea', label: 'Letter Body' },
+    { name: 'closing', type: 'text', label: 'Closing (e.g. Mit freundlichen Grüßen)' },
+    { name: 'senderName', type: 'text', label: 'Sender Name' },
+  ],
+}
+
 // ── Cover Letter Global ─────────────────────────────────
 const CoverLetter: GlobalConfig = {
   slug: 'cover-letter',
@@ -153,6 +190,7 @@ export default buildConfig({
 
   collections: [
     Media,
+    CoverLetters,
     {
       slug: 'users',
       auth: true,
