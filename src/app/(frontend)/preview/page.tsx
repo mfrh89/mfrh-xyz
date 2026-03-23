@@ -60,8 +60,8 @@ export default async function PreviewPage({ searchParams }: Props) {
             email: cv.email || '',
             phone: cv.phone || '',
             linkedin: cv.linkedin || '',
-            profileImage: cv.profileImage,
-            logo: cv.logo,
+            profileImage: typeof cv.profileImage === 'object' && cv.profileImage ? { url: cv.profileImage.url ?? undefined } : null,
+            logo: typeof cv.logo === 'object' && cv.logo ? { url: cv.logo.url ?? undefined } : null,
           }}
           serverURL={serverURL}
         />
@@ -84,8 +84,8 @@ export default async function PreviewPage({ searchParams }: Props) {
           email: cv.email || '',
           phone: cv.phone || '',
           linkedin: cv.linkedin || '',
-          profileImage: cv.profileImage,
-          logo: cv.logo,
+          profileImage: typeof cv.profileImage === 'object' && cv.profileImage ? { url: cv.profileImage.url ?? undefined } : null,
+          logo: typeof cv.logo === 'object' && cv.logo ? { url: cv.logo.url ?? undefined } : null,
           summary: cv.summary || '',
           skillMaxDots: cv.skillMaxDots ?? 5,
           skills: (cv.skills || []).map((s: any) => ({ name: s.name || '', level: s.level ?? 0 })),
