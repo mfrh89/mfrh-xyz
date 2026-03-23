@@ -195,9 +195,6 @@ export default buildConfig({
     livePreview: {
       url: ({ data, collectionConfig }) => {
         if (collectionConfig?.slug === 'cover-letters') {
-          const isDraft = data?._status === 'draft'
-          const token = data?.token
-          if (!isDraft && token) return `${serverUrl}/cover-letter/${token}`
           return `${serverUrl}/preview?collection=cover-letters&id=${data.id}`
         }
         return `${serverUrl}/preview?global=cv`
