@@ -123,8 +123,9 @@ const CoverLetters: CollectionConfig = {
   versions: { drafts: true },
   admin: {
     useAsTitle: 'company',
-    defaultColumns: ['company', 'role'],
+    defaultColumns: ['company', 'role', 'preview'],
     description: 'Per-application cover letters. Share the token URL with employers.',
+    preview: (doc) => `${serverUrl}/preview?collection=cover-letters&id=${doc.id}`,
   },
   hooks: {
     beforeChange: [
@@ -152,6 +153,15 @@ const CoverLetters: CollectionConfig = {
     { name: 'body', type: 'textarea', label: 'Letter Body' },
     { name: 'closing', type: 'text', label: 'Closing (e.g. Mit freundlichen Grüßen)' },
     { name: 'senderName', type: 'text', label: 'Sender Name' },
+    {
+      name: 'preview',
+      type: 'ui',
+      admin: {
+        components: {
+          Cell: '/src/components/admin/PreviewCell',
+        },
+      },
+    },
   ],
 }
 
@@ -175,8 +185,14 @@ export default buildConfig({
       titleSuffix: ' | MFRH CV',
     },
     livePreview: {
-      url: () => `${serverUrl}/preview?global=cv`,
+      url: ({ data, collectionConfig }) => {
+        if (collectionConfig?.slug === 'cover-letters') {
+          return `${serverUrl}/preview?collection=cover-letters&id=${data.id}`
+        }
+        return `${serverUrl}/preview?global=cv`
+      },
       globals: ['cv'],
+      collections: ['cover-letters'],
     },
   },
 

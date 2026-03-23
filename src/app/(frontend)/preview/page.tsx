@@ -1,24 +1,19 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { redirect, notFound } from 'next/navigation'
 import { LiveCV } from '@/components/live/LiveCV'
+import { LiveCoverLetter } from '@/components/live/LiveCoverLetter'
 
 type Props = {
-  searchParams: Promise<{ global?: string }>
+  searchParams: Promise<{ global?: string; collection?: string; id?: string }>
 }
 
-export default async function PreviewPage({ searchParams }: Props) {
-  const { global: globalSlug } = await searchParams
-
-  const payload = await getPayload({ config: configPromise })
-
-  // Auth check: read the payload-token cookie directly
+async function requireAuth(payload: Awaited<ReturnType<typeof getPayload>>) {
   const cookieStore = await cookies()
   const token = cookieStore.get('payload-token')?.value
 
   if (!token) {
-    console.log('[preview] No payload-token cookie found, redirecting to login')
     redirect('/admin/login')
   }
 
@@ -26,16 +21,57 @@ export default async function PreviewPage({ searchParams }: Props) {
     const { user } = await payload.auth({
       headers: new Headers({ Authorization: `JWT ${token}` }),
     })
-    if (!user) {
-      console.log('[preview] Token present but no user found')
-      redirect('/admin/login')
-    }
-  } catch (err) {
-    console.error('[preview] Auth error:', err)
+    if (!user) redirect('/admin/login')
+  } catch {
     redirect('/admin/login')
   }
+}
+
+export default async function PreviewPage({ searchParams }: Props) {
+  const { global: globalSlug, collection, id } = await searchParams
+  const payload = await getPayload({ config: configPromise })
+
+  await requireAuth(payload)
 
   const serverURL = process.env.SERVER_URL || 'http://localhost:3000'
+
+  // Cover letter preview
+  if (collection === 'cover-letters' && id) {
+    const letter = await payload.findByID({
+      collection: 'cover-letters',
+      id: Number(id),
+      draft: true,
+    })
+    if (!letter) notFound()
+
+    const cv = await payload.findGlobal({ slug: 'cv', draft: true })
+
+    return (
+      <>
+        <div className="bg-yellow-500 text-black text-center py-2 text-sm font-bold print-hidden">
+          PREVIEW - Draft-Version
+        </div>
+        <LiveCoverLetter
+          initialData={{
+            recipientSalutation: letter.recipientSalutation || '',
+            body: letter.body || '',
+            closing: letter.closing || '',
+            senderName: letter.senderName || '',
+          }}
+          cvData={{
+            name: cv.name || '',
+            title: cv.title || '',
+            email: cv.email || '',
+            phone: cv.phone || '',
+            linkedin: cv.linkedin || '',
+            profileImage: typeof cv.profileImage === 'object' && cv.profileImage ? { url: cv.profileImage.url ?? undefined } : null,
+            logo: typeof cv.logo === 'object' && cv.logo ? { url: cv.logo.url ?? undefined } : null,
+          }}
+          serverURL={serverURL}
+        />
+      </>
+    )
+  }
 
   // Default: CV preview
   const cv = await payload.findGlobal({ slug: 'cv', draft: true })
