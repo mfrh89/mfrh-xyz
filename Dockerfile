@@ -41,7 +41,7 @@ COPY --from=builder /app/package.json ./
 COPY --from=prod-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # DB schema init script
-COPY --chown=nextjs:nodejs db/init.sql db/push-schema.mjs ./db/
+COPY --chown=nextjs:nodejs db/init.sql ./db/
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
