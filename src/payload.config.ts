@@ -529,14 +529,7 @@ export default buildConfig({
     meta: {
       titleSuffix: ' | MFRH CV',
     },
-    // Temporarily disable locking to avoid relationship column issues during first deployment
-    autoLogin: process.env.NODE_ENV === 'development' ? {
-      email: 'admin@mfrh.xyz',
-      password: 'changeme123',
-    } : false,
   },
-  // Ensure locking is disabled or explicitly handled
-  lockDocuments: false,
 
   collections: [
     Media,
