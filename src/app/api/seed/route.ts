@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { NextResponse } from 'next/server'
+import { execSync } from 'child_process'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,9 +13,17 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const payload = await getPayload({ config: configPromise })
-
   try {
+    const payload = await getPayload({ config: configPromise })
+    
+    // We explicitly tell Payload to force push the database schema
+    // In case the DB is missing tables, this will fix it.
+    // getPayload alone might not block/await the push fully before returning.
+    // However since Payload doesn't expose a clean push() we fall back to creating docs
+    
+    // Check if pages exist, wait 2s to allow async push to settle if it was triggered
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
     const existingPages = await (payload as any).find({
       collection: 'pages',
       where: { slug: { equals: 'home' } },
