@@ -38,11 +38,17 @@ export const getSiteSettings = cache(async () => {
 export const getPageBySlug = cache(async (slug: string, options: { draft?: boolean } = {}) => {
   try {
     const payload = await getPayloadClient()
+    const fullPath = slug.startsWith('/') ? slug : `/${slug}`
     const result = await (payload as any).find({
       collection: 'pages',
       depth: 2,
       limit: 1,
-      where: { slug: { equals: slug } },
+      where: {
+        or: [
+          { slug: { equals: slug } },
+          { 'breadcrumbs.url': { equals: fullPath } },
+        ],
+      },
       draft: options.draft,
     })
     return ((result.docs || [])[0] || null) as import('./types').PageData | null

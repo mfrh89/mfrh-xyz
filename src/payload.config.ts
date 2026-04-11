@@ -5,6 +5,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block, CollectionConfig, Field, GlobalConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { seed } from './seed'
 
 const filename = fileURLToPath(import.meta.url)
@@ -237,14 +238,32 @@ const SiteSettings: GlobalConfig = {
   label: 'Site Settings',
   fields: [
     { name: 'siteName', type: 'text', defaultValue: 'MFRH' },
+    { name: 'navLogo', type: 'upload', relationTo: 'media', label: 'Navigation Logo' },
     { name: 'tagline', type: 'text', label: 'Short tagline' },
-    { name: 'availability', type: 'text', label: 'Availability note' },
-    { name: 'location', type: 'text' },
     { name: 'email', type: 'text' },
     { name: 'phone', type: 'text' },
     { name: 'linkedin', type: 'text', label: 'LinkedIn URL or handle' },
     { name: 'contactButtonLabel', type: 'text', defaultValue: 'Kontakt aufnehmen' },
-    { name: 'profileImage', type: 'upload', relationTo: 'media', label: 'Profile Photo' },
+    {
+      name: 'footerLinks',
+      type: 'array',
+      label: 'Footer Links',
+      admin: { description: 'Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)' },
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        {
+          name: 'type',
+          type: 'select',
+          defaultValue: 'internal',
+          options: [
+            { label: 'Internal page', value: 'internal' },
+            { label: 'External link', value: 'external' },
+          ],
+        },
+        { name: 'page', type: 'relationship', relationTo: 'pages', admin: { condition: (_data, siblingData) => siblingData?.type === 'internal' } },
+        { name: 'url', type: 'text', required: true, admin: { condition: (_data, siblingData) => siblingData?.type === 'external' } },
+      ],
+    },
   ],
 }
 
@@ -524,7 +543,11 @@ export default buildConfig({
   }),
 
   onInit: async (payload) => {
-    await seed(payload)
+    const isProduction = process.env.NODE_ENV === 'production'
+    const isCLI = process.argv.some(arg => arg.includes('migrate'))
+    if (isProduction && !isCLI) {
+      await seed(payload)
+    }
   },
 
   editor: lexicalEditor(),
@@ -547,6 +570,15 @@ export default buildConfig({
       admin: { useAsTitle: 'email' },
       fields: [],
     },
+  ],
+
+  plugins: [
+    nestedDocsPlugin({
+      collections: ['pages'],
+      generateLabel: (_, doc) => doc.title as string,
+      generateURL: (docs) =>
+        docs.reduce((url, doc) => `${url}/${doc.slug as string}`, ''),
+    }),
   ],
 
   globals: [SiteSettings, CV],
