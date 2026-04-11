@@ -5,6 +5,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block, CollectionConfig, Field, GlobalConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { seed } from './seed'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -519,8 +520,12 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || 'postgresql://payload:payload@localhost:5433/payload',
     },
-    push: false, // Hard-disable auto-push to prevent production crashes
+    push: process.env.NODE_ENV !== 'production',
   }),
+
+  onInit: async (payload) => {
+    await seed(payload)
+  },
 
   editor: lexicalEditor(),
 

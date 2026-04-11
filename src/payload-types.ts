@@ -68,6 +68,8 @@ export interface Config {
   blocks: {};
   collections: {
     media: Media;
+    pages: Page;
+    projects: Project;
     'cover-letters': CoverLetter;
     users: User;
     'payload-kv': PayloadKv;
@@ -78,6 +80,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'cover-letters': CoverLettersSelect<false> | CoverLettersSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -90,12 +94,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'site-settings': SiteSetting;
     cv: Cv;
-    'cover-letter': CoverLetter1;
   };
   globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     cv: CvSelect<false> | CvSelect<true>;
-    'cover-letter': CoverLetterSelect<false> | CoverLetterSelect<true>;
   };
   locale: null;
   widgets: {
@@ -145,6 +149,209 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Modular pages built from blocks. Set slug to "home" for the homepage.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * URL path. Use "home" for the homepage.
+   */
+  slug: string;
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            headline: string;
+            intro?: string | null;
+            media?: (number | null) | Media;
+            cta?: {
+              label?: string | null;
+              href?: string | null;
+              style?: ('primary' | 'secondary') | null;
+            };
+            secondaryCTA?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            title: string;
+            body: string;
+            mediaType?: ('image' | 'video' | 'none') | null;
+            media?: (number | null) | Media;
+            videoUrl?: string | null;
+            aspectRatio?: ('16/9' | '4/3' | '1/1' | '3/4') | null;
+            layout?: ('media-right' | 'media-left') | null;
+            caption?: string | null;
+            cta?: {
+              label?: string | null;
+              href?: string | null;
+              style?: ('primary' | 'secondary') | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textMedia';
+          }
+        | {
+            quote: string;
+            attribution?: string | null;
+            context?: string | null;
+            cta?: {
+              label?: string | null;
+              href?: string | null;
+              style?: ('primary' | 'secondary') | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            eyebrow?: string | null;
+            title?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to auto-select featured projects
+             */
+            projects?: (number | Project)[] | null;
+            showAllLink?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featuredProjects';
+          }
+        | {
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+      )[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Portfolio projects with a structured summary and flexible content sections.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * URL slug, e.g. mobile-banking-relaunch
+   */
+  slug: string;
+  client?: string | null;
+  year?: string | null;
+  role?: string | null;
+  featured?: boolean | null;
+  /**
+   * Optional accent color used in the frontend card and detail page
+   */
+  accentColor?: string | null;
+  excerpt: string;
+  coverImage?: (number | null) | Media;
+  tags?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  challenge?: string | null;
+  solution?: string | null;
+  metrics?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  sections?:
+    | (
+        | {
+            eyebrow?: string | null;
+            title: string;
+            body: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            eyebrow?: string | null;
+            title: string;
+            body: string;
+            layout?: ('media-right' | 'media-left' | 'text-only') | null;
+            media?: (number | null) | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaHighlight';
+          }
+        | {
+            title?: string | null;
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  detail?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stats';
+          }
+        | {
+            quote: string;
+            attribution?: string | null;
+            context?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Per-application cover letters. Share the token URL with employers.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -152,12 +359,12 @@ export interface Media {
  */
 export interface CoverLetter {
   id: number;
-  /**
-   * Auto-generated 6-char token used in the public URL (e.g. /cover-letter/a7f3k9)
-   */
-  token: string;
+  token?: string | null;
   company: string;
   role: string;
+  jobTitle?: string | null;
+  shareDisabled?: boolean | null;
+  shareExpiresAt?: string | null;
   recipientSalutation?: string | null;
   body?: string | null;
   closing?: string | null;
@@ -218,6 +425,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
       } | null)
     | ({
         relationTo: 'cover-letters';
@@ -289,12 +504,205 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              headline?: T;
+              intro?: T;
+              media?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    style?: T;
+                  };
+              secondaryCTA?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        textMedia?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              mediaType?: T;
+              media?: T;
+              videoUrl?: T;
+              aspectRatio?: T;
+              layout?: T;
+              caption?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    style?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              attribution?: T;
+              context?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    style?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        featuredProjects?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              intro?: T;
+              projects?: T;
+              showAllLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        richText?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  client?: T;
+  year?: T;
+  role?: T;
+  featured?: T;
+  accentColor?: T;
+  excerpt?: T;
+  coverImage?: T;
+  tags?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  challenge?: T;
+  solution?: T;
+  metrics?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  sections?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaHighlight?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              layout?: T;
+              media?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    detail?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              quote?: T;
+              attribution?: T;
+              context?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cover-letters_select".
  */
 export interface CoverLettersSelect<T extends boolean = true> {
   token?: T;
   company?: T;
   role?: T;
+  jobTitle?: T;
+  shareDisabled?: T;
+  shareExpiresAt?: T;
   recipientSalutation?: T;
   body?: T;
   closing?: T;
@@ -367,6 +775,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  siteName?: string | null;
+  tagline?: string | null;
+  availability?: string | null;
+  location?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  linkedin?: string | null;
+  contactButtonLabel?: string | null;
+  profileImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cv".
  */
 export interface Cv {
@@ -375,6 +801,8 @@ export interface Cv {
   title?: string | null;
   email?: string | null;
   phone?: string | null;
+  location?: string | null;
+  website?: string | null;
   linkedin?: string | null;
   profileImage?: (number | null) | Media;
   logo?: (number | null) | Media;
@@ -435,17 +863,21 @@ export interface Cv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cover-letter".
+ * via the `definition` "site-settings_select".
  */
-export interface CoverLetter1 {
-  id: number;
-  recipientSalutation?: string | null;
-  body?: string | null;
-  closing?: string | null;
-  senderName?: string | null;
-  _status?: ('draft' | 'published') | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  tagline?: T;
+  availability?: T;
+  location?: T;
+  email?: T;
+  phone?: T;
+  linkedin?: T;
+  contactButtonLabel?: T;
+  profileImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -456,6 +888,8 @@ export interface CvSelect<T extends boolean = true> {
   title?: T;
   email?: T;
   phone?: T;
+  location?: T;
+  website?: T;
   linkedin?: T;
   profileImage?: T;
   logo?: T;
@@ -504,20 +938,6 @@ export interface CvSelect<T extends boolean = true> {
         status?: T;
         id?: T;
       };
-  _status?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cover-letter_select".
- */
-export interface CoverLetterSelect<T extends boolean = true> {
-  recipientSalutation?: T;
-  body?: T;
-  closing?: T;
-  senderName?: T;
   _status?: T;
   updatedAt?: T;
   createdAt?: T;

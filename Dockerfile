@@ -41,8 +41,12 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/content ./content
 COPY --from=prod-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-# DB schema init script
-COPY --chown=nextjs:nodejs db/init.sql ./db/
+# Payload CLI needs config + migrations at runtime
+COPY --from=builder /app/src/payload.config.ts ./src/
+COPY --from=builder /app/src/seed.ts ./src/
+COPY --from=builder /app/src/migrations ./src/migrations
+COPY --from=builder /app/tsconfig.json ./
+
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
