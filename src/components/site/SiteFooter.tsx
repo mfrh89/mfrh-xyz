@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { SiteSettingsData } from '@/lib/payload'
 
 function externalUrl(value?: string | null) {
@@ -22,6 +23,17 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
           {linkedin && (
             <a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
           )}
+          {settings.footerLinks?.map((link, i) => {
+            if (link.type === 'external' && link.url) {
+              return <a key={i} href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+            }
+            const slug = typeof link.page === 'object' ? link.page?.slug : null
+            if (slug) {
+              const href = slug === 'home' ? '/' : `/${slug}`
+              return <Link key={i} href={href}>{link.label}</Link>
+            }
+            return null
+          })}
         </div>
       </div>
     </footer>

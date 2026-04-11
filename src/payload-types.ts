@@ -253,6 +253,15 @@ export interface Page {
     description?: string | null;
     image?: (number | null) | Media;
   };
+  parent?: (number | null) | Page;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Page;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -599,6 +608,15 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -780,14 +798,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteName?: string | null;
+  navLogo?: (number | null) | Media;
   tagline?: string | null;
-  availability?: string | null;
-  location?: string | null;
   email?: string | null;
   phone?: string | null;
   linkedin?: string | null;
   contactButtonLabel?: string | null;
-  profileImage?: (number | null) | Media;
+  /**
+   * Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)
+   */
+  footerLinks?:
+    | {
+        label: string;
+        type?: ('internal' | 'external') | null;
+        page?: (number | null) | Page;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -867,14 +895,21 @@ export interface Cv {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
+  navLogo?: T;
   tagline?: T;
-  availability?: T;
-  location?: T;
   email?: T;
   phone?: T;
   linkedin?: T;
   contactButtonLabel?: T;
-  profileImage?: T;
+  footerLinks?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        page?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

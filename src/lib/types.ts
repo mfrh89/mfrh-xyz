@@ -33,14 +33,13 @@ export interface CVData {
 
 export interface SiteSettingsData {
   siteName?: string | null
+  navLogo?: MediaAsset
   tagline?: string | null
-  availability?: string | null
-  location?: string | null
   email?: string | null
   phone?: string | null
   linkedin?: string | null
   contactButtonLabel?: string | null
-  profileImage?: MediaAsset
+  footerLinks?: { label: string; type?: 'internal' | 'external' | null; page?: { slug?: string | null } | number | null; url?: string | null }[] | null
 }
 
 export interface CTAData {
