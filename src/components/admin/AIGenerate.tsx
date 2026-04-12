@@ -52,7 +52,7 @@ export default function AIGenerate({ hint }: { hint?: string }) {
   const [error, setError] = useState<string | null>(null)
 
   const { value, setValue, path } = useField<any>({ path: '' })
-  const [fields] = useAllFormFields()
+  const [fields, dispatch] = useAllFormFields()
 
   const fieldName = path.split('.').pop() || path
   const isRichText = typeof value === 'object' && value !== null && value?.root != null
@@ -66,7 +66,6 @@ export default function AIGenerate({ hint }: { hint?: string }) {
     for (const [key, field] of Object.entries(fields)) {
       if (key !== path && field?.value != null && field.value !== '') {
         const label = key.split('.').pop() || key
-        // Extract plain text from richText field values in context
         const v = field.value as any
         if (typeof v === 'object' && v?.root != null) {
           const text = richTextToPlain(v as any)
@@ -101,7 +100,16 @@ export default function AIGenerate({ hint }: { hint?: string }) {
 
       if (data.text) {
         if (isRichText) {
-          setValue(plainToRichText(data.text))
+          // For richText fields, setValue only updates form state but the Lexical
+          // editor ignores it (it manages its own state). Setting initialValue
+          // triggers the editor to re-mount and read the new value.
+          const newValue = plainToRichText(data.text)
+          dispatch({
+            type: 'UPDATE',
+            path,
+            value: newValue,
+            initialValue: newValue,
+          } as any)
         } else {
           setValue(data.text)
         }
