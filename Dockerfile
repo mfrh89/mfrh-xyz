@@ -50,10 +50,11 @@ COPY --from=builder /app/tsconfig.json ./
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
-# Writable media directory for uploads
-RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
+# su-exec for dropping privileges in entrypoint
+RUN apk add --no-cache su-exec
 
-USER nextjs
+# Writable media directory for uploads (ownership fixed at runtime for mounted volumes)
+RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
 
 EXPOSE 3000
 ENV PORT=3000

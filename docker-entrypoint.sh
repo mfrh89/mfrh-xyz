@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
 
+# Fix ownership on mounted volumes (runs as root)
+chown -R nextjs:nodejs /app/media
+
 echo "[entrypoint] Running database migrations..."
-npx payload migrate
+su-exec nextjs npx payload migrate
 
 echo "[entrypoint] Starting Next.js..."
-exec npm run start
+exec su-exec nextjs npm run start
