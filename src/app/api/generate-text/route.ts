@@ -15,8 +15,10 @@ interface GenerateRequest {
 export async function POST(request: Request) {
   const payload = await getPayload({ config: configPromise })
 
-  // Verify the request comes from an authenticated admin user
-  const { user } = await payload.auth({ headers: request.headers })
+  // Strip basic auth from headers so Payload reads the JWT cookie instead
+  const headers = new Headers(request.headers)
+  headers.delete('authorization')
+  const { user } = await payload.auth({ headers })
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
