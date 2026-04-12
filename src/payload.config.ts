@@ -32,6 +32,12 @@ function slugify(input: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
+function aiField(hint?: string) {
+  const component: any = { path: '/src/components/admin/AIGenerate' }
+  if (hint) component.clientProps = { hint }
+  return { afterInput: [component] }
+}
+
 const ctaFields: Field[] = [
   { name: 'label', type: 'text', required: true },
   { name: 'href', type: 'text', required: true },
@@ -65,7 +71,7 @@ const pageBlocks: Block[] = [
     fields: [
       { name: 'eyebrow', type: 'text' },
       { name: 'headline', type: 'text', required: true },
-      { name: 'intro', type: 'textarea' },
+      { name: 'intro', type: 'textarea', admin: { components: aiField('Short introductory paragraph, 2-3 sentences, for a hero section') } },
       { name: 'media', type: 'upload', relationTo: 'media', label: 'Hero Image' },
       optionalCTA,
       {
@@ -85,7 +91,7 @@ const pageBlocks: Block[] = [
     fields: [
       { name: 'eyebrow', type: 'text' },
       { name: 'title', type: 'text', required: true },
-      { name: 'body', type: 'textarea', required: true },
+      { name: 'body', type: 'textarea', required: true, admin: { components: aiField('Body text for a content section, 1-2 paragraphs') } },
       {
         name: 'mediaType',
         type: 'select',
@@ -126,7 +132,7 @@ const pageBlocks: Block[] = [
     slug: 'quote',
     labels: { singular: 'Quote', plural: 'Quotes' },
     fields: [
-      { name: 'quote', type: 'textarea', required: true },
+      { name: 'quote', type: 'textarea', required: true, admin: { components: aiField('An impactful quote or testimonial, 1-2 sentences') } },
       { name: 'attribution', type: 'text' },
       { name: 'context', type: 'text' },
       optionalCTA,
@@ -165,7 +171,7 @@ const projectSectionBlocks: Block[] = [
     fields: [
       { name: 'eyebrow', type: 'text' },
       { name: 'title', type: 'text', required: true },
-      { name: 'body', type: 'textarea', required: true },
+      { name: 'body', type: 'textarea', required: true, admin: { components: aiField('Descriptive paragraph for a project section') } },
     ],
   },
   {
@@ -174,7 +180,7 @@ const projectSectionBlocks: Block[] = [
     fields: [
       { name: 'eyebrow', type: 'text' },
       { name: 'title', type: 'text', required: true },
-      { name: 'body', type: 'textarea', required: true },
+      { name: 'body', type: 'textarea', required: true, admin: { components: aiField('Descriptive paragraph accompanying a media highlight') } },
       {
         name: 'layout',
         type: 'select',
@@ -210,7 +216,7 @@ const projectSectionBlocks: Block[] = [
     slug: 'quote',
     labels: { singular: 'Quote', plural: 'Quotes' },
     fields: [
-      { name: 'quote', type: 'textarea', required: true },
+      { name: 'quote', type: 'textarea', required: true, admin: { components: aiField('An impactful quote or testimonial, 1-2 sentences') } },
       { name: 'attribution', type: 'text' },
       { name: 'context', type: 'text' },
     ],
@@ -237,31 +243,90 @@ const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
   fields: [
-    { name: 'siteName', type: 'text', defaultValue: 'MFRH' },
-    { name: 'navLogo', type: 'upload', relationTo: 'media', label: 'Navigation Logo' },
-    { name: 'tagline', type: 'text', label: 'Short tagline' },
-    { name: 'email', type: 'text' },
-    { name: 'phone', type: 'text' },
-    { name: 'linkedin', type: 'text', label: 'LinkedIn URL or handle' },
-    { name: 'contactButtonLabel', type: 'text', defaultValue: 'Kontakt aufnehmen' },
     {
-      name: 'footerLinks',
-      type: 'array',
-      label: 'Footer Links',
-      admin: { description: 'Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)' },
-      fields: [
-        { name: 'label', type: 'text', required: true },
+      type: 'tabs',
+      tabs: [
         {
-          name: 'type',
-          type: 'select',
-          defaultValue: 'internal',
-          options: [
-            { label: 'Internal page', value: 'internal' },
-            { label: 'External link', value: 'external' },
+          label: 'General',
+          fields: [
+            { name: 'siteName', type: 'text', defaultValue: 'MFRH' },
+            { name: 'navLogo', type: 'upload', relationTo: 'media', label: 'Navigation Logo' },
+            { name: 'tagline', type: 'text', label: 'Short tagline' },
+            { name: 'email', type: 'text' },
+            { name: 'phone', type: 'text' },
+            { name: 'linkedin', type: 'text', label: 'LinkedIn URL or handle' },
+            { name: 'contactButtonLabel', type: 'text', defaultValue: 'Kontakt aufnehmen' },
+            {
+              name: 'footerLinks',
+              type: 'array',
+              label: 'Footer Links',
+              admin: { description: 'Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)' },
+              fields: [
+                { name: 'label', type: 'text', required: true },
+                {
+                  name: 'type',
+                  type: 'select',
+                  defaultValue: 'internal',
+                  options: [
+                    { label: 'Internal page', value: 'internal' },
+                    { label: 'External link', value: 'external' },
+                  ],
+                },
+                { name: 'page', type: 'relationship', relationTo: 'pages', admin: { condition: (_data, siblingData) => siblingData?.type === 'internal' } },
+                { name: 'url', type: 'text', required: true, admin: { condition: (_data, siblingData) => siblingData?.type === 'external' } },
+              ],
+            },
           ],
         },
-        { name: 'page', type: 'relationship', relationTo: 'pages', admin: { condition: (_data, siblingData) => siblingData?.type === 'internal' } },
-        { name: 'url', type: 'text', required: true, admin: { condition: (_data, siblingData) => siblingData?.type === 'external' } },
+        {
+          label: 'APIs',
+          fields: [
+            {
+              name: 'openrouterApiKey',
+              type: 'text',
+              label: 'OpenRouter API Key',
+              admin: { description: 'API key from openrouter.ai — used for AI text generation in the admin panel' },
+            },
+            {
+              name: 'openrouterModel',
+              type: 'text',
+              defaultValue: 'anthropic/claude-3.5-haiku',
+              admin: {
+                components: {
+                  Field: '/src/components/admin/ModelSelect',
+                },
+              },
+            },
+            {
+              name: 'openrouterTemperature',
+              type: 'number',
+              label: 'Temperature',
+              defaultValue: 0.7,
+              min: 0,
+              max: 2,
+              admin: { description: '0 = deterministic, 2 = creative. Default: 0.7' },
+            },
+            {
+              name: 'openrouterMaxTokens',
+              type: 'number',
+              label: 'Max Tokens',
+              defaultValue: 500,
+              min: 50,
+              max: 4000,
+              admin: { description: 'Maximum output length. Default: 500' },
+            },
+            {
+              name: 'openrouterSystemPrompt',
+              type: 'textarea',
+              label: 'System Prompt',
+              defaultValue: 'You write text for a portfolio website. English only. Write like a human: plain, direct, no filler. Avoid buzzwords and superlatives. Prefer short sentences, concrete specifics, understated confidence. Return ONLY the text, no quotes or labels.',
+              admin: {
+                rows: 6,
+                description: 'Instructions that control tone and style for all AI-generated text. The field context is added automatically.',
+              },
+            },
+          ],
+        },
       ],
     },
   ],
@@ -339,7 +404,7 @@ const CV: GlobalConfig = {
     { name: 'linkedin', type: 'text', label: 'LinkedIn (e.g. linkedin.com/in/mfrh)' },
     { name: 'profileImage', type: 'upload', relationTo: 'media', label: 'Profile Photo' },
     { name: 'logo', type: 'upload', relationTo: 'media', label: 'Logo' },
-    { name: 'summary', type: 'textarea', label: 'About Me (Über Mich)' },
+    { name: 'summary', type: 'textarea', label: 'About Me (Über Mich)', admin: { components: aiField('Professional summary/bio, 3-4 sentences, first person') } },
     {
       name: 'experience',
       type: 'array',
@@ -350,7 +415,7 @@ const CV: GlobalConfig = {
         { name: 'endDate', type: 'text', label: 'End Date (e.g. heute)' },
         { name: 'company', type: 'text', label: 'Company' },
         { name: 'role', type: 'text', label: 'Job Title / Role' },
-        { name: 'description', type: 'textarea', label: 'Responsibilities (one bullet point per line)' },
+        { name: 'description', type: 'textarea', label: 'Responsibilities (one bullet point per line)', admin: { components: aiField('Bullet-point list of job responsibilities, one per line, no dashes') } },
       ],
     },
     {
@@ -443,7 +508,7 @@ const Projects: CollectionConfig = {
     { name: 'role', type: 'text' },
     { name: 'featured', type: 'checkbox', defaultValue: false },
     { name: 'accentColor', type: 'text', defaultValue: '#bf6b45', admin: { description: 'Optional accent color used in the frontend card and detail page' } },
-    { name: 'excerpt', type: 'textarea', required: true },
+    { name: 'excerpt', type: 'textarea', required: true, admin: { components: aiField('Short project summary, 1-2 sentences, for card previews') } },
     { name: 'coverImage', type: 'upload', relationTo: 'media' },
     {
       name: 'tags',
@@ -458,8 +523,8 @@ const Projects: CollectionConfig = {
         { name: 'url', type: 'text', required: true },
       ],
     },
-    { name: 'challenge', type: 'textarea' },
-    { name: 'solution', type: 'textarea' },
+    { name: 'challenge', type: 'textarea', admin: { components: aiField('The problem or challenge this project addressed, 2-3 sentences') } },
+    { name: 'solution', type: 'textarea', admin: { components: aiField('How the challenge was solved, highlighting approach and technology, 2-3 sentences') } },
     {
       name: 'metrics',
       type: 'array',
@@ -517,7 +582,7 @@ const CoverLetters: CollectionConfig = {
     { name: 'shareDisabled', type: 'checkbox', label: 'Disable public sharing', defaultValue: false },
     { name: 'shareExpiresAt', type: 'date', label: 'Public share expires at' },
     { name: 'recipientSalutation', type: 'text', label: 'Salutation (e.g. Sehr geehrtes ... Team)' },
-    { name: 'body', type: 'textarea', label: 'Letter Body' },
+    { name: 'body', type: 'textarea', label: 'Letter Body', admin: { components: aiField('Professional cover letter body, 3-4 paragraphs, formal but personable tone') } },
     { name: 'closing', type: 'text', label: 'Closing (e.g. Mit freundlichen Grüßen)' },
     { name: 'senderName', type: 'text', label: 'Sender Name' },
     {

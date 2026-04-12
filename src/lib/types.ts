@@ -42,6 +42,11 @@ export interface SiteSettingsData {
   linkedin?: string | null
   contactButtonLabel?: string | null
   footerLinks?: { label: string; type?: 'internal' | 'external' | null; page?: { slug?: string | null } | number | null; url?: string | null }[] | null
+  openrouterApiKey?: string | null
+  openrouterModel?: string | null
+  openrouterTemperature?: number | null
+  openrouterMaxTokens?: number | null
+  openrouterSystemPrompt?: string | null
 }
 
 export interface CTAData {

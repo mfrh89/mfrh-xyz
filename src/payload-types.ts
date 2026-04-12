@@ -816,6 +816,23 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * API key from openrouter.ai — used for AI text generation in the admin panel
+   */
+  openrouterApiKey?: string | null;
+  openrouterModel?: string | null;
+  /**
+   * 0 = deterministic, 2 = creative. Default: 0.7
+   */
+  openrouterTemperature?: number | null;
+  /**
+   * Maximum output length. Default: 500
+   */
+  openrouterMaxTokens?: number | null;
+  /**
+   * Instructions that control tone and style for all AI-generated text. The field context is added automatically.
+   */
+  openrouterSystemPrompt?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -912,6 +929,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  openrouterApiKey?: T;
+  openrouterModel?: T;
+  openrouterTemperature?: T;
+  openrouterMaxTokens?: T;
+  openrouterSystemPrompt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
