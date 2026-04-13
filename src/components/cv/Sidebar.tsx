@@ -4,7 +4,6 @@ import { SectionTitle, SubsectionTitle } from './SectionTitle'
 interface SidebarProps {
   data: {
     readonly summary: string
-    readonly skillMaxDots: number | null
     readonly skills: readonly { readonly name: string; readonly level: number | null }[]
     readonly languages: readonly { readonly name: string; readonly level: string }[]
     readonly education: readonly {
@@ -66,7 +65,7 @@ export function SkillsSection({ data }: SidebarProps) {
                   <span className="text-[12px] text-[var(--color-text-muted)]">
                     {skill.name}
                   </span>
-                  <SkillDots level={skill.level ?? 0} max={data.skillMaxDots ?? 5} />
+                  <SkillDots level={Number(skill.level) || 0} max={5} />
                 </div>
               ))}
             </div>

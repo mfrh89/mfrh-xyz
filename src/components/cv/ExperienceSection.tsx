@@ -1,6 +1,7 @@
+import { calcDuration } from './calcDuration'
+
 interface ExperienceSectionProps {
   experience: {
-    duration?: string | null
     startDate?: string | null
     endDate?: string | null
     company?: string | null
@@ -22,12 +23,14 @@ export function ExperienceSection({ experience }: ExperienceSectionProps) {
       </div>
 
       <div className="space-y-8">
-        {experience.map((job, i) => (
+        {experience.map((job, i) => {
+          const duration = calcDuration(job)
+          return (
           <article key={i} className="no-break">
             {/* Meta line */}
             <p className="mb-0.5 text-[12px] text-[var(--color-text-light)]">
-              {job.duration
-                ? `${job.duration} \u2022 `
+              {duration
+                ? `${duration} \u2022 `
                 : job.startDate
                   ? `${job.startDate}${job.endDate ? ` - ${job.endDate}` : ''} \u2022 `
                   : ''}
@@ -56,7 +59,7 @@ export function ExperienceSection({ experience }: ExperienceSectionProps) {
               })}
             </ul>
           </article>
-        ))}
+        )})}
       </div>
     </section>
   )

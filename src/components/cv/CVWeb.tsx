@@ -1,40 +1,10 @@
 import Image from 'next/image'
 import { SkillDots } from './SkillDots'
+import { calcDuration } from './calcDuration'
 import { getMediaProps } from '@/lib/media'
 import { hasRichText } from '@/lib/utils'
 import { InlineRichText } from '@/components/blocks/InlineRichText'
-import type { CVData, CVEntry } from '@/lib/types'
-
-const MONTH_MAP: Record<string, number> = {
-  januar: 0, february: 1, februar: 1, march: 2, märz: 2, april: 3,
-  mai: 4, may: 4, juni: 5, june: 5, juli: 6, july: 6, august: 7,
-  september: 8, oktober: 9, october: 9, november: 10, dezember: 11, december: 11,
-}
-
-function parseMonthYear(value: string): Date | null {
-  const parts = value.trim().toLowerCase().split(/\s+/)
-  if (parts.length < 2) return null
-  const month = MONTH_MAP[parts[0]]
-  const year = parseInt(parts[1], 10)
-  if (month == null || isNaN(year)) return null
-  return new Date(year, month)
-}
-
-function calcDuration(entry: CVEntry): string | null {
-  if (!entry.startDate) return null
-  const start = parseMonthYear(entry.startDate)
-  if (!start) return null
-  const end = entry.endDate?.toLowerCase() === 'heute' || entry.endDate?.toLowerCase() === 'present'
-    ? new Date()
-    : entry.endDate ? parseMonthYear(entry.endDate) : new Date()
-  if (!end) return null
-  const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())
-  const years = Math.floor(totalMonths / 12)
-  const months = totalMonths % 12
-  if (years > 0 && months > 0) return `${years} ${years === 1 ? 'Jahr' : 'Jahre'}, ${months} ${months === 1 ? 'Monat' : 'Monate'}`
-  if (years > 0) return `${years} ${years === 1 ? 'Jahr' : 'Jahre'}`
-  return `${months} ${months === 1 ? 'Monat' : 'Monate'}`
-}
+import type { CVData } from '@/lib/types'
 
 function WebSectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
   return (
@@ -164,7 +134,7 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
           <WebSectionTitle id="experience">Berufserfahrung</WebSectionTitle>
           <div className="space-y-4">
             {cv.experience!.map((job, i) => {
-              const duration = calcDuration(job) || job.duration
+              const duration = calcDuration(job)
               const dateRange = job.startDate ? `${job.startDate}${job.endDate ? ` – ${job.endDate}` : ''}` : null
               return (
               <div key={job.id || i} className="section-card">
@@ -176,7 +146,13 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
                     )}
                   </div>
                   <h3 className="title-sm">{job.role}</h3>
-                  {job.company && <p className="label-sm !text-[var(--primary)]">{job.company}</p>}
+                  {job.company && (
+                    <p className="label-sm !text-[var(--primary)]">
+                      {job.companyUrl ? (
+                        <a href={job.companyUrl} target="_blank" rel="noopener noreferrer"><span className="cv-link">{job.company}</span><svg aria-hidden="true" className="cv-link-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 11L11 5M11 5H6M11 5V10" /></svg></a>
+                      ) : job.company}
+                    </p>
+                  )}
                 </div>
                 {job.description && (
                   <ul className="mt-4 space-y-2">
@@ -210,7 +186,7 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
                 {cv.languages.map((lang, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <span className="body-md">{lang.name}</span>
-                    <span className="label-sm">{lang.level}</span>
+                    <span className="body-md uppercase text-[var(--on-surface-variant)]">{lang.level}</span>
                   </div>
                 ))}
               </div>
@@ -218,12 +194,13 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
           )}
 
           <div className="section-card">
-            <h3 className="title-sm mb-4">Tech & Software</h3>
+            <h3 className="title-sm mb-1">Tech & Software</h3>
+            <p className="label-sm text-[var(--on-surface-variant)] mb-4">1 Basic — 2 Intermediate — 3 Proficient — 4 Advanced — 5 Expert</p>
             <div className="skill-grid">
               {cv.skills!.map((skill, i) => (
                 <div key={i} className="flex items-center justify-between gap-3">
                   <span className="body-md">{skill.name}</span>
-                  <SkillDots level={skill.level ?? 0} max={cv.skillMaxDots ?? 5} />
+                  <SkillDots level={Number(skill.level) || 0} max={5} />
                 </div>
               ))}
             </div>
@@ -245,7 +222,11 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
                     </p>
                   )}
                   <h3 className="title-sm">{edu.degree}</h3>
-                  <p className="label-sm !text-[var(--primary)]">{edu.institution}</p>
+                  <p className="label-sm !text-[var(--primary)]">
+                    {edu.institutionUrl ? (
+                      <a href={edu.institutionUrl} target="_blank" rel="noopener noreferrer"><span className="cv-link">{edu.institution}</span><svg aria-hidden="true" className="cv-link-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 11L11 5M11 5H6M11 5V10" /></svg></a>
+                    ) : edu.institution}
+                  </p>
                 </div>
               </div>
             ))}
@@ -267,7 +248,11 @@ export function CVWeb({ cv, serverURL }: { cv: CVData; serverURL: string }) {
                     </p>
                   )}
                   <h3 className="title-sm">{cert.name}</h3>
-                  <p className="label-sm !text-[var(--primary)]">{cert.issuer}</p>
+                  <p className="label-sm !text-[var(--primary)]">
+                    {cert.issuerUrl ? (
+                      <a href={cert.issuerUrl} target="_blank" rel="noopener noreferrer"><span className="cv-link">{cert.issuer}</span><svg aria-hidden="true" className="cv-link-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 11L11 5M11 5H6M11 5V10" /></svg></a>
+                    ) : cert.issuer}
+                  </p>
                 </div>
               </div>
             ))}

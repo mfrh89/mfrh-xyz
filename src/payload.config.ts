@@ -416,22 +416,23 @@ const CV: GlobalConfig = {
       type: 'array',
       label: 'Work Experience (Berufserfahrung)',
       fields: [
-        { name: 'duration', type: 'text', label: 'Duration (e.g. 1.5 Jahre)' },
-        { name: 'startDate', type: 'text', label: 'Start Date (e.g. Juni 2024)' },
-        { name: 'endDate', type: 'text', label: 'End Date (e.g. heute)' },
-        { name: 'company', type: 'text', label: 'Company' },
+        {
+          type: 'row',
+          fields: [
+            { name: 'startDate', type: 'text', label: 'Start Date (e.g. Juni 2024)' },
+            { name: 'endDate', type: 'text', label: 'End Date (e.g. heute)' },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'company', type: 'text', label: 'Company' },
+            { name: 'companyUrl', type: 'text', label: 'Company URL' },
+          ],
+        },
         { name: 'role', type: 'text', label: 'Job Title / Role' },
         { name: 'description', type: 'textarea', label: 'Responsibilities (one bullet point per line)', admin: { components: aiField('Bullet-point list of job responsibilities, one per line, no dashes') } },
       ],
-    },
-    {
-      name: 'skillMaxDots',
-      type: 'number',
-      label: 'Max Dots per Skill',
-      defaultValue: 5,
-      min: 1,
-      max: 10,
-      admin: { description: 'Maximum number of dots shown for each skill rating' },
     },
     {
       name: 'skills',
@@ -439,7 +440,19 @@ const CV: GlobalConfig = {
       label: 'Tech & Software (mit Dot-Rating)',
       fields: [
         { name: 'name', type: 'text', label: 'Skill Name' },
-        { name: 'level', type: 'number', label: 'Level', defaultValue: 4, min: 1, max: 10, admin: { description: 'Number of filled dots' } },
+        {
+          name: 'level',
+          type: 'radio',
+          label: 'Level',
+          defaultValue: '3',
+          options: [
+            { label: '1 — Basic', value: '1' },
+            { label: '2 — Intermediate', value: '2' },
+            { label: '3 — Proficient', value: '3' },
+            { label: '4 — Advanced', value: '4' },
+            { label: '5 — Expert', value: '5' },
+          ],
+        },
       ],
     },
     {
@@ -456,10 +469,21 @@ const CV: GlobalConfig = {
       type: 'array',
       label: 'Education (Ausbildung)',
       fields: [
-        { name: 'institution', type: 'text', label: 'Institution' },
+        {
+          type: 'row',
+          fields: [
+            { name: 'institution', type: 'text', label: 'Institution' },
+            { name: 'institutionUrl', type: 'text', label: 'Institution URL' },
+          ],
+        },
         { name: 'degree', type: 'text', label: 'Degree / Program' },
-        { name: 'startDate', type: 'text', label: 'Start Date' },
-        { name: 'endDate', type: 'text', label: 'End Date' },
+        {
+          type: 'row',
+          fields: [
+            { name: 'startDate', type: 'text', label: 'Start Date' },
+            { name: 'endDate', type: 'text', label: 'End Date' },
+          ],
+        },
       ],
     },
     {
@@ -468,7 +492,13 @@ const CV: GlobalConfig = {
       label: 'Certificates (Zertifikate)',
       fields: [
         { name: 'name', type: 'text', label: 'Certificate Name' },
-        { name: 'issuer', type: 'text', label: 'Issuer' },
+        {
+          type: 'row',
+          fields: [
+            { name: 'issuer', type: 'text', label: 'Issuer' },
+            { name: 'issuerUrl', type: 'text', label: 'Issuer URL' },
+          ],
+        },
         { name: 'date', type: 'text', label: 'Date' },
         { name: 'status', type: 'text', label: 'Status (e.g. in progress)' },
       ],

@@ -8,8 +8,7 @@ import type { CVData } from '@/lib/types'
 function mapSidebarData(cv: CVData) {
   return {
     summary: richTextToPlain(cv.summary),
-    skillMaxDots: cv.skillMaxDots ?? 5,
-    skills: (cv.skills || []).map((skill) => ({ name: skill.name || '', level: skill.level ?? 0 })),
+    skills: (cv.skills || []).map((skill) => ({ name: skill.name || '', level: Number(skill.level) || 0 })),
     languages: (cv.languages || []).map((language) => ({ name: language.name || '', level: language.level || '' })),
     education: (cv.education || []).map((entry) => ({
       institution: entry.institution || '',

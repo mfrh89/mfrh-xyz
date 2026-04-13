@@ -1,65 +1,163 @@
 {
+  "pageTitle": "Curriculum Vitae",
+  "pageDescription": null,
   "name": "Maximilian Huber",
-  "title": "Project Manager \u2022 Product Owner \u2022 Scrum Master",
+  "title": "Project Manager",
   "email": "contact@mfrh.xyz",
   "phone": "0049 176 247 419 16",
+  "location": "Munich",
+  "website": "mfrh.xyz",
   "linkedin": "linkedin.com/in/mfrh",
   "profileImage": null,
-  "summary": "Seit \u00fcber 10 Jahren arbeite ich bereits in der Agenturbranche und konnte mir damit ein breites Know-How in den Bereichen Brand- und Projektmanagement aufbauen.\n\nIn den letzten Jahren habe ich mich auf Web- und App-Entwicklung spezialisiert und bringe so meine Begeisterung f\u00fcr User Experience, funktionales Produktdesign und moderne Technologien in meine Arbeit ein. Sowohl privat als auch beruflich besch\u00e4ftige ich mich intensiv mit Trends und Best Practices im digitalen Marketing, in der Webtechnologie und in der KI.",
+  "logo": null,
+  "summary": {
+    "root": {
+      "type": "root",
+      "format": "",
+      "indent": 0,
+      "version": 1,
+      "children": [
+        {
+          "type": "paragraph",
+          "format": "",
+          "indent": 0,
+          "version": 1,
+          "children": [
+            {
+              "mode": "normal",
+              "text": "Seit über 10 Jahren arbeite ich bereits in der Agenturbranche und konnte mir damit ein breites Know-How in den Bereichen Brand- und Projektmanagement aufbauen.",
+              "type": "text",
+              "style": "",
+              "detail": 0,
+              "format": 0,
+              "version": 1
+            }
+          ],
+          "direction": "ltr",
+          "textStyle": "",
+          "textFormat": 0
+        },
+        {
+          "type": "paragraph",
+          "format": "",
+          "indent": 0,
+          "version": 1,
+          "children": [
+            {
+              "mode": "normal",
+              "text": "In den letzten Jahren habe ich mich auf Web- und App-Entwicklung spezialisiert und bringe so meine Begeisterung für User Experience, funktionales Produktdesign und moderne Technologien in meine Arbeit ein. Sowohl privat als auch beruflich beschäftige ich mich intensiv mit Trends und Best Practices im digitalen Marketing, in der Webtechnologie und in der KI.",
+              "type": "text",
+              "style": "",
+              "detail": 0,
+              "format": 0,
+              "version": 1
+            }
+          ],
+          "direction": "ltr",
+          "textStyle": "",
+          "textFormat": 0
+        }
+      ],
+      "direction": "ltr"
+    }
+  },
   "experience": [
     {
-      "duration": "1.5 Jahre",
       "startDate": "Juni 2024",
       "endDate": "heute",
       "company": "LOOP New Media GmbH",
+      "companyUrl": "https://www.agentur-loop.com/",
       "role": "Lead Project Manager",
-      "description": "Verantwortliche disziplinarische F\u00fchrung und Coaching von Teams im internationalen Umfeld unter Anwendung klassischer, hybrider und agiler Methoden\nSteuerung und End-to-End-Management komplexer Web- und App-Projekte \u2013 von Konzeption \u00fcber UX/UI-Design, Entwicklung, Integrationen, Rollout bis zur Post-Launch-Maintenance\nKombination klassischer Projektmanagement-Aufgaben mit agilen Rollen wie Product Owner und Scrum Master\nErstellung und Pflege von User Stories mit Akzeptanzkriterien sowie Steuerung und Priorisierung des Product Backlogs\nAktives Stakeholdermanagement und Kommunikation mit internationalen Kunden und Teams, \u00fcberwiegend auf Englisch\nEvaluierung und Integration moderner Technologien und KI-Tools zur Optimierung von Arbeitsabl\u00e4ufen"
+      "description": "Verantwortliche disziplinarische Führung und Coaching von Teams im internationalen Umfeld unter Anwendung klassischer, hybrider und agiler Methoden\nSteuerung und End-to-End-Management komplexer Web- und App-Projekte – von Konzeption über UX/UI-Design, Entwicklung, Integrationen, Rollout bis zur Post-Launch-Maintenance\nKombination klassischer Projektmanagement-Aufgaben mit agilen Rollen wie Product Owner und Scrum Master\nErstellung und Pflege von User Stories mit Akzeptanzkriterien sowie Steuerung und Priorisierung des Product Backlogs\nAktives Stakeholdermanagement und Kommunikation mit internationalen Kunden und Teams, überwiegend auf Englisch\nEvaluierung und Integration moderner Technologien und KI-Tools zur Optimierung von Arbeitsabläufen"
     },
     {
-      "duration": "3 Jahre",
       "startDate": "April 2021",
       "endDate": "Mai 2024",
       "company": "LOOP New Media GmbH",
+      "companyUrl": "https://www.agentur-loop.com/",
       "role": "Senior Brand Manager & Team Lead",
-      "description": "Verantwortung f\u00fcr das Brand-Management-Team sowie Unterst\u00fctzung und Coaching weiterer Projektmanager\nSteuerung und Koordination vielf\u00e4ltiger Projekte in den Bereichen Corporate Design, Produktion, Kampagnen und Webauftritte\nSicherstellung termingerechter Umsetzung und Einhaltung von Qualit\u00e4tsstandards in cross-funktionalen Teams\nF\u00f6rderung der bereichs\u00fcbergreifenden Zusammenarbeit zur Optimierung von Projektresultaten"
+      "description": "Verantwortung für das Brand-Management-Team sowie Unterstützung und Coaching weiterer Projektmanager\nSteuerung und Koordination vielfältiger Projekte in den Bereichen Corporate Design, Produktion, Kampagnen und Webauftritte\nSicherstellung termingerechter Umsetzung und Einhaltung von Qualitätsstandards in cross-funktionalen Teams\nFörderung der bereichsübergreifenden Zusammenarbeit zur Optimierung von Projektresultaten"
     },
     {
-      "duration": "4.5 Jahre",
       "startDate": "August 2016",
-      "endDate": "M\u00e4rz 2021",
+      "endDate": "März 2021",
       "company": "REPRISE/IPG Mediabrands",
+      "companyUrl": "https://www.omc.com/",
       "role": "Lead of Creation & Strategy",
-      "description": "Leitung und Coaching eines interdisziplin\u00e4ren Teams aus Designer:innen, Texter:innen, Social Media und Paid Media Manager:innen\nEigenst\u00e4ndige Durchf\u00fchrung von Projekten, sowie fachliche Supervision und Unterst\u00fctzung\nEnd-to-End Management & operative Umsetzung digitaler Werbema\u00dfnahmen in den Bereichen Web, Content-Kreation & Produktion, Social-Media-Kampagnen und Paid-Advertising\nVerantwortliche Mitarbeit im New Business Prozess, einschlie\u00dflich Vorbereitung, strategischer Entwicklung und Pr\u00e4sentation von Angeboten f\u00fcr Bestands- und Neukunden"
+      "description": "Leitung und Coaching eines interdisziplinären Teams aus Designer:innen, Texter:innen, Social Media und Paid Media Manager:innen\nEigenständige Durchführung von Projekten, sowie fachliche Supervision und Unterstützung\nEnd-to-End Management & operative Umsetzung digitaler Werbemaßnahmen in den Bereichen Web, Content-Kreation & Produktion, Social-Media-Kampagnen und Paid-Advertising\nVerantwortliche Mitarbeit im New Business Prozess, einschließlich Vorbereitung, strategischer Entwicklung und Präsentation von Angeboten für Bestands- und Neukunden"
     }
   ],
-  "skillMaxDots": 5,
   "skills": [
-    { "name": "Jira/Confluence", "level": 5 },
-    { "name": "Adobe Photoshop", "level": 4 },
-    { "name": "Microsoft Office", "level": 5 },
-    { "name": "Figma/Framer", "level": 4 },
-    { "name": "Webflow", "level": 3 },
-    { "name": "Prompt Engineering", "level": 4 },
-    { "name": "runpod/vast.ai", "level": 3 },
-    { "name": "Midjourney/ComfyUI", "level": 4 },
-    { "name": "Brevo/ActiveCampaign", "level": 3 },
-    { "name": "HTML/CSS", "level": 3 },
-    { "name": "JavaScript/React", "level": 2 },
-    { "name": "WordPress", "level": 4 }
+    {
+      "name": "Jira/Confluence",
+      "level": "5"
+    },
+    {
+      "name": "Adobe Photoshop",
+      "level": "4"
+    },
+    {
+      "name": "Microsoft Office",
+      "level": "5"
+    },
+    {
+      "name": "Figma/Framer",
+      "level": "4"
+    },
+    {
+      "name": "Webflow",
+      "level": "3"
+    },
+    {
+      "name": "Prompt Engineering",
+      "level": "4"
+    },
+    {
+      "name": "runpod/vast.ai",
+      "level": "3"
+    },
+    {
+      "name": "Midjourney/ComfyUI",
+      "level": "4"
+    },
+    {
+      "name": "Brevo/ActiveCampaign",
+      "level": "3"
+    },
+    {
+      "name": "HTML/CSS",
+      "level": "3"
+    },
+    {
+      "name": "JavaScript/React",
+      "level": "2"
+    },
+    {
+      "name": "WordPress",
+      "level": "4"
+    }
   ],
   "languages": [
-    { "name": "Deutsch", "level": "Muttersprache" },
-    { "name": "Englisch", "level": "C1" }
+    {
+      "name": "Deutsch",
+      "level": "Muttersprache"
+    },
+    {
+      "name": "Englisch",
+      "level": "C1"
+    }
   ],
   "education": [
     {
-      "institution": "Wirtschaftsuniversit\u00e4t, Wien",
+      "institution": "Wirtschaftsuniversität, Wien",
+      "institutionUrl": "https://www.wu.ac.at",
       "degree": "Betriebswirtschaftslehre",
       "startDate": "September 2010",
       "endDate": "September 2014"
     },
     {
       "institution": "Chiemgau Gymnasium, Traunstein",
+      "institutionUrl": null,
       "degree": "Abitur",
       "startDate": "September 2001",
       "endDate": "Juli 2010"
@@ -67,15 +165,17 @@
   ],
   "certificates": [
     {
-      "name": "PSPO-II\u00ae",
-      "issuer": "scrum.org",
+      "name": "Project Management Professional",
+      "issuer": "Google, coursera.org",
+      "issuerUrl": "https://www.coursera.org/professional-certificates/google-project-management",
       "date": "Oktober 2025",
-      "status": "in progress"
+      "status": ""
     },
     {
-      "name": "PSM-II\u00ae",
-      "issuer": "scrum.org",
-      "date": "Oktober 2025",
+      "name": "IBM AI Product Manager Professional",
+      "issuer": "IBM, cousera.org",
+      "issuerUrl": "https://www.coursera.org/professional-certificates/ibm-ai-product-manager",
+      "date": "Mai 2026",
       "status": "in progress"
     }
   ]

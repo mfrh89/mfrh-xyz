@@ -3,10 +3,10 @@ import type { MediaAsset } from './media'
 export type { MediaAsset } from './media'
 
 export type CVEntry = {
-  duration?: string | null
   startDate?: string | null
   endDate?: string | null
   company?: string | null
+  companyUrl?: string | null
   role?: string | null
   description?: string | null
   id?: string | null
@@ -25,11 +25,10 @@ export interface CVData {
   profileImage?: MediaAsset
   logo?: MediaAsset
   summary?: RichTextContent
-  skillMaxDots?: number | null
-  skills?: { name?: string | null; level?: number | null }[] | null
+  skills?: { name?: string | null; level?: string | number | null }[] | null
   languages?: { name?: string | null; level?: string | null }[] | null
-  education?: { institution?: string | null; degree?: string | null; startDate?: string | null; endDate?: string | null }[] | null
-  certificates?: { name?: string | null; issuer?: string | null; date?: string | null; status?: string | null }[] | null
+  education?: { institution?: string | null; institutionUrl?: string | null; degree?: string | null; startDate?: string | null; endDate?: string | null }[] | null
+  certificates?: { name?: string | null; issuer?: string | null; issuerUrl?: string | null; date?: string | null; status?: string | null }[] | null
   experience?: CVEntry[] | null
 }
 

@@ -7,6 +7,28 @@ function loadJSON(filePath: string): Record<string, unknown> | null {
   return JSON.parse(readFileSync(filePath, 'utf-8'))
 }
 
+function textToLexical(text: string) {
+  return {
+    root: {
+      type: 'root',
+      format: '' as const,
+      indent: 0,
+      version: 1,
+      direction: 'ltr' as const,
+      children: text.split('\n\n').map((paragraph) => ({
+        type: 'paragraph',
+        format: '' as const,
+        indent: 0,
+        version: 1,
+        direction: 'ltr' as const,
+        textFormat: 0,
+        textStyle: '',
+        children: [{ type: 'text', text: paragraph, format: 0, mode: 'normal' as const, style: '', detail: 0, version: 1 }],
+      })),
+    },
+  }
+}
+
 export async function seed(payload: Payload): Promise<void> {
   const users = await payload.find({ collection: 'users', limit: 1 })
   if (users.totalDocs > 0) {
@@ -30,6 +52,9 @@ export async function seed(payload: Payload): Promise<void> {
   const contentDir = path.resolve(process.cwd(), 'content')
   const cvData = loadJSON(path.join(contentDir, 'cv', 'index.json'))
   if (cvData) {
+    if (typeof cvData.summary === 'string') {
+      cvData.summary = textToLexical(cvData.summary)
+    }
     await payload.updateGlobal({
       slug: 'cv',
       data: cvData,

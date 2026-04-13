@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { getCV } from '@/lib/payload'
 import { getMediaProps } from '@/lib/media'
+import { calcDuration } from '@/components/cv/calcDuration'
 
 export default async function CVPrintPage() {
   const cv = await getCV()
@@ -73,10 +74,10 @@ export default async function CVPrintPage() {
                   <div key={i} className="cv-print-skill-row">
                     <span className="cv-print-skill-name">{skill.name}</span>
                     <div className="cv-print-dots">
-                      {Array.from({ length: cv.skillMaxDots ?? 5 }, (_, j) => (
+                      {Array.from({ length: 5 }, (_, j) => (
                         <span
                           key={j}
-                          className={`cv-print-dot ${j < (skill.level ?? 0) ? 'cv-print-dot-filled' : 'cv-print-dot-empty'}`}
+                          className={`cv-print-dot ${j < (Number(skill.level) || 0) ? 'cv-print-dot-filled' : 'cv-print-dot-empty'}`}
                         />
                       ))}
                     </div>
@@ -131,11 +132,13 @@ export default async function CVPrintPage() {
           </div>
 
           <div className="cv-print-experience">
-            {(cv.experience || []).map((job, i) => (
+            {(cv.experience || []).map((job, i) => {
+              const duration = calcDuration(job)
+              return (
               <article key={i} className="no-break">
                 <p className="cv-print-job-meta">
-                  {job.duration
-                    ? `${job.duration} \u2022 `
+                  {duration
+                    ? `${duration} \u2022 `
                     : job.startDate
                       ? `${job.startDate}${job.endDate ? ` - ${job.endDate}` : ''} \u2022 `
                       : ''}
@@ -155,7 +158,7 @@ export default async function CVPrintPage() {
                   })}
                 </ul>
               </article>
-            ))}
+            )})}
           </div>
         </main>
       </div>

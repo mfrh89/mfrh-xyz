@@ -91,7 +91,7 @@ html, body {
     --surface-mid: #222222;
     --surface-high: #2a2a2a;
     --surface-highest: #323232;
-    --surface-lowest: #1c1c1c;
+    --surface-lowest: #161616;
     --primary: #f0f0f0;
     --primary-container: #cccccc;
     --on-primary: #141414;
@@ -156,18 +156,29 @@ html, body {
   border: 1px solid var(--ghost-border);
 }
 
+.cv-link {
+  text-decoration: none;
+}
+
+a:hover .cv-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.cv-link-arrow {
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  margin-left: 0.15em;
+  vertical-align: -0.3em;
+}
+
 .section-card {
   border-radius: 16px;
   border: 1px solid var(--ghost-border);
   background: var(--surface-lowest);
-  padding: 1.25rem 1rem;
+  padding: 2rem;
   box-shadow: var(--shadow-float);
-}
-
-@media (min-width: 768px) {
-  .section-card {
-    padding: 2rem 2.5rem;
-  }
 }
 
 .section-card-dark {
@@ -321,7 +332,7 @@ html, body {
 
 .skill-grid {
   display: grid;
-  gap: 4px;
+  gap: 6px 48px;
 }
 
 @media (min-width: 640px) {
