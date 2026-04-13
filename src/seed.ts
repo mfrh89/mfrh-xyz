@@ -74,7 +74,7 @@ export async function seed(payload: Payload): Promise<void> {
       const { id, ...data } = page as Record<string, unknown>
       await payload.create({
         collection: 'pages',
-        data: { ...data, _status: 'published' },
+        data: { ...data, _status: 'published' } as any,
       })
     }
     payload.logger.info(`  ✓ ${(pagesData as unknown[]).length} pages seeded`)
@@ -87,7 +87,7 @@ export async function seed(payload: Payload): Promise<void> {
       const { id, ...data } = project as Record<string, unknown>
       await payload.create({
         collection: 'projects',
-        data: { ...data, _status: 'published' },
+        data: { ...data, _status: 'published' } as any,
       })
     }
     payload.logger.info(`  ✓ ${projectsData.length} project(s) seeded`)
@@ -100,7 +100,7 @@ export async function seed(payload: Payload): Promise<void> {
       const { id, ...data } = cl as Record<string, unknown>
       await payload.create({
         collection: 'cover-letters',
-        data: { ...data, _status: 'published' },
+        data: { ...data, _status: 'published' } as any,
       })
     }
     payload.logger.info(`  ✓ ${clData.length} cover letter(s) seeded`)
