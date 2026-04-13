@@ -38,19 +38,46 @@ function aiField(hint?: string) {
   return { afterInput: [component] }
 }
 
-const ctaLinkFields: Field[] = [
-  { name: 'label', type: 'text' },
+// ── Shared Link Fields ────────────────────────────────
+const navLinkFields: Field[] = [
+  { name: 'label', type: 'text', required: true },
   {
-    name: 'linkType',
+    name: 'type',
     type: 'select',
-    defaultValue: 'external',
+    defaultValue: 'route',
     options: [
-      { label: 'Internal page', value: 'internal' },
-      { label: 'External link', value: 'external' },
+      { label: 'Route', value: 'route' },
+      { label: 'Internal', value: 'internal' },
+      { label: 'External', value: 'external' },
     ],
   },
-  { name: 'page', type: 'relationship', relationTo: 'pages' as any, admin: { condition: (_data, siblingData) => siblingData?.linkType === 'internal' } },
-  { name: 'href', type: 'text', label: 'URL', admin: { condition: (_data, siblingData) => siblingData?.linkType === 'external' } },
+  {
+    name: 'route',
+    type: 'select',
+    label: 'App Route',
+    options: [
+      { label: 'CV (/cv)', value: '/cv' },
+      { label: 'Projects (/projects)', value: '/projects' },
+    ],
+    admin: { condition: (_data, siblingData) => siblingData?.type === 'route' },
+  },
+  {
+    name: 'page',
+    type: 'relationship',
+    relationTo: ['pages', 'projects'] as any,
+    admin: { condition: (_data, siblingData) => siblingData?.type === 'internal' },
+  },
+  {
+    name: 'url',
+    type: 'text',
+    label: 'URL',
+    admin: { condition: (_data, siblingData) => siblingData?.type === 'external' },
+  },
+]
+
+const linkFields: Field[] = [
+  { name: 'label', type: 'text' },
+  ...navLinkFields.filter((f) => 'name' in f && f.name !== 'label'),
 ]
 
 const optionalCTA: Field = {
@@ -59,7 +86,7 @@ const optionalCTA: Field = {
   label: 'Call to Action (optional)',
   admin: { condition: () => true },
   fields: [
-    ...ctaLinkFields,
+    ...linkFields,
     {
       name: 'style',
       type: 'select',
@@ -87,7 +114,7 @@ const pageBlocks: Block[] = [
         name: 'secondaryCTA',
         type: 'group',
         label: 'Secondary CTA (optional)',
-        fields: ctaLinkFields,
+        fields: linkFields,
       },
     ],
   },
@@ -165,7 +192,7 @@ const pageBlocks: Block[] = [
     slug: 'richText',
     labels: { singular: 'Rich Text', plural: 'Rich Text' },
     fields: [
-      { name: 'content', type: 'richText', required: true },
+      { name: 'content', type: 'richText', required: true, admin: { components: aiField('Content paragraph(s) for a rich text section') } },
     ],
   },
 ]
@@ -253,34 +280,27 @@ const SiteSettings: GlobalConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'General',
+          label: 'Header & Footer',
           fields: [
             { name: 'siteName', type: 'text', defaultValue: 'MFRH' },
-            { name: 'navLogo', type: 'upload', relationTo: 'media', label: 'Navigation Logo' },
             { name: 'tagline', type: 'text', label: 'Short tagline' },
-            { name: 'email', type: 'text' },
-            { name: 'phone', type: 'text' },
-            { name: 'linkedin', type: 'text', label: 'LinkedIn URL or handle' },
+            { name: 'navLogo', type: 'upload', relationTo: 'media', label: 'Navigation Logo' },
+            {
+              name: 'navLinks',
+              type: 'array',
+              label: 'Navigation Links',
+              admin: { description: 'Main navigation links in the header' },
+              fields: navLinkFields,
+            },
             { name: 'contactButtonLabel', type: 'text', defaultValue: 'Kontakt aufnehmen' },
+            { name: 'email', type: 'text' },
+            { name: 'linkedin', type: 'text', label: 'LinkedIn URL or handle' },
             {
               name: 'footerLinks',
               type: 'array',
               label: 'Footer Links',
               admin: { description: 'Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)' },
-              fields: [
-                { name: 'label', type: 'text', required: true },
-                {
-                  name: 'type',
-                  type: 'select',
-                  defaultValue: 'internal',
-                  options: [
-                    { label: 'Internal page', value: 'internal' },
-                    { label: 'External link', value: 'external' },
-                  ],
-                },
-                { name: 'page', type: 'relationship', relationTo: 'pages', admin: { condition: (_data, siblingData) => siblingData?.type === 'internal' } },
-                { name: 'url', type: 'text', required: true, admin: { condition: (_data, siblingData) => siblingData?.type === 'external' } },
-              ],
+              fields: navLinkFields,
             },
           ],
         },
@@ -369,7 +389,7 @@ const Pages: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true },
-    { name: 'slug', type: 'text', required: true, unique: true, admin: { description: 'URL path. Use "home" for the homepage.' } },
+    { name: 'slug', type: 'text', required: true, unique: true, admin: { components: { Field: '/src/components/admin/SlugField' } } },
     {
       name: 'layout',
       type: 'blocks',
@@ -381,8 +401,8 @@ const Pages: CollectionConfig = {
       type: 'group',
       label: 'SEO',
       fields: [
-        { name: 'title', type: 'text', label: 'Meta Title' },
-        { name: 'description', type: 'textarea', label: 'Meta Description' },
+        { name: 'title', type: 'text', label: 'Meta Title', admin: { components: aiField('SEO meta title, max 60 characters, concise and descriptive') } },
+        { name: 'description', type: 'textarea', label: 'Meta Description', admin: { components: aiField('SEO meta description, max 155 characters, compelling summary for search results') } },
         { name: 'image', type: 'upload', relationTo: 'media', label: 'OG Image' },
       ],
     },
@@ -404,7 +424,6 @@ const CV: GlobalConfig = {
     { name: 'name', type: 'text', label: 'Full Name', required: true },
     { name: 'title', type: 'text', label: 'Professional Title (subtitle)' },
     { name: 'email', type: 'text', label: 'Email' },
-    { name: 'phone', type: 'text', label: 'Phone' },
     { name: 'location', type: 'text', label: 'Location' },
     { name: 'website', type: 'text', label: 'Website' },
     { name: 'linkedin', type: 'text', label: 'LinkedIn (e.g. linkedin.com/in/mfrh)' },
@@ -538,7 +557,7 @@ const Projects: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true },
-    { name: 'slug', type: 'text', required: true, unique: true, admin: { description: 'URL slug, e.g. mobile-banking-relaunch' } },
+    { name: 'slug', type: 'text', required: true, unique: true, admin: { components: { Field: '/src/components/admin/SlugField' } } },
     { name: 'client', type: 'text' },
     { name: 'year', type: 'text' },
     { name: 'role', type: 'text' },
@@ -554,20 +573,7 @@ const Projects: CollectionConfig = {
     {
       name: 'links',
       type: 'array',
-      fields: [
-        { name: 'label', type: 'text', required: true },
-        {
-          name: 'linkType',
-          type: 'select',
-          defaultValue: 'external',
-          options: [
-            { label: 'Internal page', value: 'internal' },
-            { label: 'External link', value: 'external' },
-          ],
-        },
-        { name: 'page', type: 'relationship', relationTo: 'pages' as any, admin: { condition: (_data, siblingData) => siblingData?.linkType === 'internal' } },
-        { name: 'url', type: 'text', label: 'URL', admin: { condition: (_data, siblingData) => siblingData?.linkType === 'external' } },
-      ],
+      fields: navLinkFields,
     },
     { name: 'challenge', type: 'richText', admin: { components: aiField('The problem or challenge this project addressed, 2-3 sentences') } },
     { name: 'solution', type: 'richText', admin: { components: aiField('How the challenge was solved, highlighting approach and technology, 2-3 sentences') } },

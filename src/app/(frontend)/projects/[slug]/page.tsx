@@ -10,6 +10,7 @@ import { SiteFooter } from '@/components/site/SiteFooter'
 import { SiteHeader } from '@/components/site/SiteHeader'
 import { InlineRichText } from '@/components/blocks/InlineRichText'
 import { getMediaProps, getProjectBySlug, getSiteSettings, hasRichText } from '@/lib/payload'
+import { resolveNavLinkHref } from '@/lib/utils'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -65,13 +66,11 @@ export default async function ProjectDetailPage({ params }: Props) {
               {!!project.links?.length && (
                 <div className="mt-8 flex flex-wrap gap-3">
                   {project.links.map((link, i) => {
-                    const isInternal = link.linkType === 'internal'
-                    const href = isInternal
-                      ? (typeof link.page === 'object' && link.page?.slug ? (link.page.slug === 'home' ? '/' : `/${link.page.slug}`) : null)
-                      : link.url
+                    const href = resolveNavLinkHref(link)
                     if (!href) return null
+                    const isExternal = link.type === 'external'
                     return (
-                      <a key={`${href}-${i}`} href={href} {...(!isInternal && { target: '_blank', rel: 'noreferrer' })} className="btn-primary">
+                      <a key={`${href}-${i}`} href={href} {...(isExternal && { target: '_blank', rel: 'noreferrer' })} className="btn-primary">
                         {link.label || 'Open link'}
                       </a>
                     )

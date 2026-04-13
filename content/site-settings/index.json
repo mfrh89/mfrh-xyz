@@ -1,0 +1,10 @@
+{
+  "navLinks": [],
+  "footerLinks": [],
+  "siteName": "MFRH",
+  "contactButtonLabel": "Kontakt aufnehmen",
+  "openrouterModel": "anthropic/claude-3.5-haiku",
+  "openrouterTemperature": 0.7,
+  "openrouterMaxTokens": 500,
+  "openrouterSystemPrompt": "You write text for a portfolio website. English only. Write like a human: plain, direct, no filler. Avoid buzzwords and superlatives. Prefer short sentences, concrete specifics, understated confidence. Return ONLY the text, no quotes or labels."
+}

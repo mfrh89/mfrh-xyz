@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { SiteSettingsData } from '@/lib/payload'
 import { getMediaProps } from '@/lib/media'
+import { resolveNavLinkHref } from '@/lib/utils'
 
 function resolveContactHref(settings: SiteSettingsData) {
   if (settings.email) return `mailto:${settings.email}`
@@ -36,11 +37,25 @@ export function SiteHeader({ settings }: { settings: SiteSettingsData }) {
           })()}
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex body-sm">
-          <Link href="/">Home</Link>
-          <Link href="/cv">CV</Link>
-          <Link href="/projects">Projekte</Link>
-        </nav>
+        {settings.navLinks && settings.navLinks.length > 0 && (
+          <nav className="hidden items-center gap-6 md:flex body-sm">
+            {settings.navLinks.map((link, i) => {
+              const href = resolveNavLinkHref(link)
+              if (!href) return null
+              const isExternal = link.type === 'external'
+              return (
+                <Link
+                  key={i}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noreferrer' : undefined}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+          </nav>
+        )}
 
         <a
           href={contactHref}

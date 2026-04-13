@@ -21,7 +21,6 @@ export function CoverLetterDocument({
         name={cv.name || ''}
         title={cv.title || ''}
         email={cv.email || ''}
-        phone={cv.phone || ''}
         location={cv.location || ''}
         website={cv.website || ''}
         linkedin={cv.linkedin || ''}

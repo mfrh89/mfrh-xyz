@@ -4,7 +4,6 @@ interface HeaderProps {
   name: string
   title: string
   email: string
-  phone: string
   location?: string
   website?: string
   linkedin: string
@@ -48,7 +47,7 @@ function ContactLink({ href, children }: { href?: string; children: React.ReactN
   )
 }
 
-export function Header({ name, title, email, phone, location, website, linkedin, profileImage, logo }: HeaderProps) {
+export function Header({ name, title, email, location, website, linkedin, profileImage, logo }: HeaderProps) {
   return (
     <header>
       {/* Desktop layout */}
@@ -85,11 +84,6 @@ export function Header({ name, title, email, phone, location, website, linkedin,
           {email && (
             <ContactLink href={`mailto:${email}`}>
               {email} <span className="cv-arrow text-[var(--color-text)]">&#8599;</span>
-            </ContactLink>
-          )}
-          {phone && (
-            <ContactLink href={`tel:${phone.replace(/\s+/g, '')}`}>
-              {phone} <span className="cv-arrow text-[var(--color-text)]">&#8599;</span>
             </ContactLink>
           )}
           {location && <p>{location}</p>}
@@ -132,11 +126,6 @@ export function Header({ name, title, email, phone, location, website, linkedin,
             {email && (
               <ContactLink href={`mailto:${email}`}>
                 {email} <span className="text-[var(--color-text)]">&#8599;</span>
-              </ContactLink>
-            )}
-            {phone && (
-              <ContactLink href={`tel:${phone.replace(/\s+/g, '')}`}>
-                {phone} <span className="text-[var(--color-text)]">&#8599;</span>
               </ContactLink>
             )}
             {location && <p>{location}</p>}

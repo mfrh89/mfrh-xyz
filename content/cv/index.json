@@ -4,7 +4,6 @@
   "name": "Maximilian Huber",
   "title": "Project Manager",
   "email": "contact@mfrh.xyz",
-  "phone": "0049 176 247 419 16",
   "location": "Munich",
   "website": "mfrh.xyz",
   "linkedin": "linkedin.com/in/mfrh",
@@ -63,6 +62,7 @@
   },
   "experience": [
     {
+      "id": "69dd37d670dd2b64250b0140",
       "startDate": "Juni 2024",
       "endDate": "heute",
       "company": "LOOP New Media GmbH",
@@ -71,6 +71,7 @@
       "description": "Verantwortliche disziplinarische Führung und Coaching von Teams im internationalen Umfeld unter Anwendung klassischer, hybrider und agiler Methoden\nSteuerung und End-to-End-Management komplexer Web- und App-Projekte – von Konzeption über UX/UI-Design, Entwicklung, Integrationen, Rollout bis zur Post-Launch-Maintenance\nKombination klassischer Projektmanagement-Aufgaben mit agilen Rollen wie Product Owner und Scrum Master\nErstellung und Pflege von User Stories mit Akzeptanzkriterien sowie Steuerung und Priorisierung des Product Backlogs\nAktives Stakeholdermanagement und Kommunikation mit internationalen Kunden und Teams, überwiegend auf Englisch\nEvaluierung und Integration moderner Technologien und KI-Tools zur Optimierung von Arbeitsabläufen"
     },
     {
+      "id": "69dd37d670dd2b64250b0141",
       "startDate": "April 2021",
       "endDate": "Mai 2024",
       "company": "LOOP New Media GmbH",
@@ -79,6 +80,7 @@
       "description": "Verantwortung für das Brand-Management-Team sowie Unterstützung und Coaching weiterer Projektmanager\nSteuerung und Koordination vielfältiger Projekte in den Bereichen Corporate Design, Produktion, Kampagnen und Webauftritte\nSicherstellung termingerechter Umsetzung und Einhaltung von Qualitätsstandards in cross-funktionalen Teams\nFörderung der bereichsübergreifenden Zusammenarbeit zur Optimierung von Projektresultaten"
     },
     {
+      "id": "69dd37d670dd2b64250b0142",
       "startDate": "August 2016",
       "endDate": "März 2021",
       "company": "REPRISE/IPG Mediabrands",
@@ -89,66 +91,81 @@
   ],
   "skills": [
     {
+      "id": "69dd37d670dd2b64250b0143",
       "name": "Jira/Confluence",
       "level": "5"
     },
     {
+      "id": "69dd37d670dd2b64250b0144",
       "name": "Adobe Photoshop",
       "level": "4"
     },
     {
+      "id": "69dd37d670dd2b64250b0145",
       "name": "Microsoft Office",
       "level": "5"
     },
     {
+      "id": "69dd37d670dd2b64250b0146",
       "name": "Figma/Framer",
       "level": "4"
     },
     {
+      "id": "69dd37d670dd2b64250b0147",
       "name": "Webflow",
       "level": "3"
     },
     {
+      "id": "69dd37d670dd2b64250b0148",
       "name": "Prompt Engineering",
       "level": "4"
     },
     {
+      "id": "69dd37d670dd2b64250b0149",
       "name": "runpod/vast.ai",
       "level": "3"
     },
     {
+      "id": "69dd37d670dd2b64250b014a",
       "name": "Midjourney/ComfyUI",
       "level": "4"
     },
     {
+      "id": "69dd37d670dd2b64250b014b",
       "name": "Brevo/ActiveCampaign",
       "level": "3"
     },
     {
+      "id": "69dd37d670dd2b64250b014c",
       "name": "HTML/CSS",
       "level": "3"
     },
     {
+      "id": "69dd37d670dd2b64250b014d",
       "name": "JavaScript/React",
       "level": "2"
     },
     {
+      "id": "69dd37d670dd2b64250b014e",
       "name": "WordPress",
       "level": "4"
     }
   ],
   "languages": [
     {
+      "id": "69dd37d670dd2b64250b014f",
       "name": "Deutsch",
       "level": "Muttersprache"
     },
     {
+      "id": "69dd37d670dd2b64250b0150",
       "name": "Englisch",
       "level": "C1"
     }
   ],
   "education": [
     {
+      "id": "69dd37d670dd2b64250b0151",
       "institution": "Wirtschaftsuniversität, Wien",
       "institutionUrl": "https://www.wu.ac.at",
       "degree": "Betriebswirtschaftslehre",
@@ -156,6 +173,7 @@
       "endDate": "September 2014"
     },
     {
+      "id": "69dd37d670dd2b64250b0152",
       "institution": "Chiemgau Gymnasium, Traunstein",
       "institutionUrl": null,
       "degree": "Abitur",
@@ -165,6 +183,7 @@
   ],
   "certificates": [
     {
+      "id": "69dd37d670dd2b64250b0153",
       "name": "Project Management Professional",
       "issuer": "Google, coursera.org",
       "issuerUrl": "https://www.coursera.org/professional-certificates/google-project-management",
@@ -172,6 +191,7 @@
       "status": ""
     },
     {
+      "id": "69dd37d670dd2b64250b0154",
       "name": "IBM AI Product Manager Professional",
       "issuer": "IBM, cousera.org",
       "issuerUrl": "https://www.coursera.org/professional-certificates/ibm-ai-product-manager",

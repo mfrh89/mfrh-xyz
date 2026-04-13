@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { SiteSettingsData } from '@/lib/payload'
+import { resolveNavLinkHref } from '@/lib/utils'
 
 function externalUrl(value?: string | null) {
   if (!value) return null
@@ -19,20 +20,18 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
 
         <div className="flex flex-wrap items-center gap-4 body-sm">
           {settings.email && <a href={`mailto:${settings.email}`}>{settings.email}</a>}
-          {settings.phone && <a href={`tel:${settings.phone.replace(/\s+/g, '')}`}>{settings.phone}</a>}
           {linkedin && (
             <a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
           )}
           {settings.footerLinks?.map((link, i) => {
-            if (link.type === 'external' && link.url) {
-              return <a key={i} href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
-            }
-            const slug = typeof link.page === 'object' ? link.page?.slug : null
-            if (slug) {
-              const href = slug === 'home' ? '/' : `/${slug}`
-              return <Link key={i} href={href}>{link.label}</Link>
-            }
-            return null
+            const href = resolveNavLinkHref(link)
+            if (!href) return null
+            const isExternal = link.type === 'external'
+            return isExternal ? (
+              <a key={i} href={href} target="_blank" rel="noreferrer">{link.label}</a>
+            ) : (
+              <Link key={i} href={href}>{link.label}</Link>
+            )
           })}
         </div>
       </div>

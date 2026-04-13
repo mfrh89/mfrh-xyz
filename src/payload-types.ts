@@ -157,9 +157,6 @@ export interface Media {
 export interface Page {
   id: number;
   title: string;
-  /**
-   * URL path. Use "home" for the homepage.
-   */
   slug: string;
   layout?:
     | (
@@ -184,16 +181,34 @@ export interface Page {
             media?: (number | null) | Media;
             cta?: {
               label?: string | null;
-              linkType?: ('internal' | 'external') | null;
-              page?: (number | null) | Page;
-              href?: string | null;
+              type?: ('route' | 'internal' | 'external') | null;
+              route?: ('/cv' | '/projects') | null;
+              page?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null);
+              url?: string | null;
               style?: ('primary' | 'secondary') | null;
             };
             secondaryCTA?: {
               label?: string | null;
-              linkType?: ('internal' | 'external') | null;
-              page?: (number | null) | Page;
-              href?: string | null;
+              type?: ('route' | 'internal' | 'external') | null;
+              route?: ('/cv' | '/projects') | null;
+              page?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null);
+              url?: string | null;
             };
             id?: string | null;
             blockName?: string | null;
@@ -225,9 +240,18 @@ export interface Page {
             caption?: string | null;
             cta?: {
               label?: string | null;
-              linkType?: ('internal' | 'external') | null;
-              page?: (number | null) | Page;
-              href?: string | null;
+              type?: ('route' | 'internal' | 'external') | null;
+              route?: ('/cv' | '/projects') | null;
+              page?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null);
+              url?: string | null;
               style?: ('primary' | 'secondary') | null;
             };
             id?: string | null;
@@ -254,9 +278,18 @@ export interface Page {
             context?: string | null;
             cta?: {
               label?: string | null;
-              linkType?: ('internal' | 'external') | null;
-              page?: (number | null) | Page;
-              href?: string | null;
+              type?: ('route' | 'internal' | 'external') | null;
+              route?: ('/cv' | '/projects') | null;
+              page?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null);
+              url?: string | null;
               style?: ('primary' | 'secondary') | null;
             };
             id?: string | null;
@@ -325,9 +358,6 @@ export interface Page {
 export interface Project {
   id: number;
   title: string;
-  /**
-   * URL slug, e.g. mobile-banking-relaunch
-   */
   slug: string;
   client?: string | null;
   year?: string | null;
@@ -348,8 +378,17 @@ export interface Project {
   links?:
     | {
         label: string;
-        linkType?: ('internal' | 'external') | null;
-        page?: (number | null) | Page;
+        type?: ('route' | 'internal' | 'external') | null;
+        route?: ('/cv' | '/projects') | null;
+        page?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'projects';
+              value: number | Project;
+            } | null);
         url?: string | null;
         id?: string | null;
       }[]
@@ -654,18 +693,20 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
-                    linkType?: T;
+                    type?: T;
+                    route?: T;
                     page?: T;
-                    href?: T;
+                    url?: T;
                     style?: T;
                   };
               secondaryCTA?:
                 | T
                 | {
                     label?: T;
-                    linkType?: T;
+                    type?: T;
+                    route?: T;
                     page?: T;
-                    href?: T;
+                    url?: T;
                   };
               id?: T;
               blockName?: T;
@@ -686,9 +727,10 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
-                    linkType?: T;
+                    type?: T;
+                    route?: T;
                     page?: T;
-                    href?: T;
+                    url?: T;
                     style?: T;
                   };
               id?: T;
@@ -704,9 +746,10 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
-                    linkType?: T;
+                    type?: T;
+                    route?: T;
                     page?: T;
-                    href?: T;
+                    url?: T;
                     style?: T;
                   };
               id?: T;
@@ -775,7 +818,8 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
-        linkType?: T;
+        type?: T;
+        route?: T;
         page?: T;
         url?: T;
         id?: T;
@@ -930,20 +974,49 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteName?: string | null;
-  navLogo?: (number | null) | Media;
   tagline?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  linkedin?: string | null;
+  navLogo?: (number | null) | Media;
+  /**
+   * Main navigation links in the header
+   */
+  navLinks?:
+    | {
+        label: string;
+        type?: ('route' | 'internal' | 'external') | null;
+        route?: ('/cv' | '/projects') | null;
+        page?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'projects';
+              value: number | Project;
+            } | null);
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   contactButtonLabel?: string | null;
+  email?: string | null;
+  linkedin?: string | null;
   /**
    * Links displayed in the footer (e.g. Impressum, Datenschutz, GitHub)
    */
   footerLinks?:
     | {
         label: string;
-        type?: ('internal' | 'external') | null;
-        page?: (number | null) | Page;
+        type?: ('route' | 'internal' | 'external') | null;
+        route?: ('/cv' | '/projects') | null;
+        page?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'projects';
+              value: number | Project;
+            } | null);
         url?: string | null;
         id?: string | null;
       }[]
@@ -979,7 +1052,6 @@ export interface Cv {
   name: string;
   title?: string | null;
   email?: string | null;
-  phone?: string | null;
   location?: string | null;
   website?: string | null;
   linkedin?: string | null;
@@ -1002,26 +1074,19 @@ export interface Cv {
   } | null;
   experience?:
     | {
-        duration?: string | null;
         startDate?: string | null;
         endDate?: string | null;
         company?: string | null;
+        companyUrl?: string | null;
         role?: string | null;
         description?: string | null;
         id?: string | null;
       }[]
     | null;
-  /**
-   * Maximum number of dots shown for each skill rating
-   */
-  skillMaxDots?: number | null;
   skills?:
     | {
         name?: string | null;
-        /**
-         * Number of filled dots
-         */
-        level?: number | null;
+        level?: ('1' | '2' | '3' | '4' | '5') | null;
         id?: string | null;
       }[]
     | null;
@@ -1035,6 +1100,7 @@ export interface Cv {
   education?:
     | {
         institution?: string | null;
+        institutionUrl?: string | null;
         degree?: string | null;
         startDate?: string | null;
         endDate?: string | null;
@@ -1045,6 +1111,7 @@ export interface Cv {
     | {
         name?: string | null;
         issuer?: string | null;
+        issuerUrl?: string | null;
         date?: string | null;
         status?: string | null;
         id?: string | null;
@@ -1060,17 +1127,27 @@ export interface Cv {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
-  navLogo?: T;
   tagline?: T;
-  email?: T;
-  phone?: T;
-  linkedin?: T;
+  navLogo?: T;
+  navLinks?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        route?: T;
+        page?: T;
+        url?: T;
+        id?: T;
+      };
   contactButtonLabel?: T;
+  email?: T;
+  linkedin?: T;
   footerLinks?:
     | T
     | {
         label?: T;
         type?: T;
+        route?: T;
         page?: T;
         url?: T;
         id?: T;
@@ -1094,7 +1171,6 @@ export interface CvSelect<T extends boolean = true> {
   name?: T;
   title?: T;
   email?: T;
-  phone?: T;
   location?: T;
   website?: T;
   linkedin?: T;
@@ -1104,15 +1180,14 @@ export interface CvSelect<T extends boolean = true> {
   experience?:
     | T
     | {
-        duration?: T;
         startDate?: T;
         endDate?: T;
         company?: T;
+        companyUrl?: T;
         role?: T;
         description?: T;
         id?: T;
       };
-  skillMaxDots?: T;
   skills?:
     | T
     | {
@@ -1131,6 +1206,7 @@ export interface CvSelect<T extends boolean = true> {
     | T
     | {
         institution?: T;
+        institutionUrl?: T;
         degree?: T;
         startDate?: T;
         endDate?: T;
@@ -1141,6 +1217,7 @@ export interface CvSelect<T extends boolean = true> {
     | {
         name?: T;
         issuer?: T;
+        issuerUrl?: T;
         date?: T;
         status?: T;
         id?: T;

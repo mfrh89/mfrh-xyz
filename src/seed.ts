@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'fs'
 import path from 'path'
 import type { Payload } from 'payload'
 
-function loadJSON(filePath: string): Record<string, unknown> | null {
+function loadJSON(filePath: string): any | null {
   if (!existsSync(filePath)) return null
   return JSON.parse(readFileSync(filePath, 'utf-8'))
 }
@@ -38,6 +38,8 @@ export async function seed(payload: Payload): Promise<void> {
 
   payload.logger.info('— Seeding fresh database...')
 
+  const contentDir = path.resolve(process.cwd(), 'content')
+
   // 1. Create admin user
   await payload.create({
     collection: 'users',
@@ -48,21 +50,37 @@ export async function seed(payload: Payload): Promise<void> {
   })
   payload.logger.info('  ✓ Admin user created (admin@mfrh.xyz)')
 
-  // 2. Seed CV global from content JSON
-  const contentDir = path.resolve(process.cwd(), 'content')
+  // 2. Seed CV global
   const cvData = loadJSON(path.join(contentDir, 'cv', 'index.json'))
   if (cvData) {
     if (typeof cvData.summary === 'string') {
       cvData.summary = textToLexical(cvData.summary)
     }
-    await payload.updateGlobal({
-      slug: 'cv',
-      data: cvData,
-    })
+    await payload.updateGlobal({ slug: 'cv', data: cvData })
     payload.logger.info('  ✓ CV data seeded')
   }
 
-  // 3. Seed cover letter from content JSON
+  // 3. Seed site settings
+  const ssData = loadJSON(path.join(contentDir, 'site-settings', 'index.json'))
+  if (ssData) {
+    await payload.updateGlobal({ slug: 'site-settings', data: ssData })
+    payload.logger.info('  ✓ Site settings seeded')
+  }
+
+  // 4. Seed pages
+  const pagesData = loadJSON(path.join(contentDir, 'pages', 'index.json'))
+  if (Array.isArray(pagesData)) {
+    for (const page of pagesData) {
+      const { id, ...data } = page as Record<string, unknown>
+      await payload.create({
+        collection: 'pages',
+        data: { ...data, _status: 'published' },
+      })
+    }
+    payload.logger.info(`  ✓ ${(pagesData as unknown[]).length} pages seeded`)
+  }
+
+  // 5. Seed cover letter
   const clData = loadJSON(path.join(contentDir, 'cover-letter', 'index.json'))
   if (clData) {
     await payload.create({
@@ -76,43 +94,6 @@ export async function seed(payload: Payload): Promise<void> {
     })
     payload.logger.info('  ✓ Cover letter seeded')
   }
-
-  // 4. Create homepage with hero block
-  await payload.create({
-    collection: 'pages',
-    data: {
-      title: 'Home',
-      slug: 'home',
-      layout: [
-        {
-          blockType: 'hero',
-          headline: 'Maximilian Huber',
-          eyebrow: 'Project Manager • Product Owner • Scrum Master',
-          intro: {
-            root: {
-              type: 'root',
-              format: '',
-              indent: 0,
-              version: 1,
-              children: [{
-                type: 'paragraph',
-                format: '',
-                indent: 0,
-                version: 1,
-                children: [{ type: 'text', text: 'Seit über 10 Jahren in der Agenturbranche. Spezialisiert auf Web- und App-Projekte.', format: 0, mode: 'normal', style: '', detail: 0, version: 1 }],
-                direction: 'ltr',
-                textFormat: 0,
-                textStyle: '',
-              }],
-              direction: 'ltr',
-            },
-          },
-        },
-      ],
-      _status: 'published',
-    },
-  })
-  payload.logger.info('  ✓ Homepage seeded')
 
   payload.logger.info('— Seed complete')
 }

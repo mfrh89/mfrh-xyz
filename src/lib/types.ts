@@ -18,7 +18,6 @@ export interface CVData {
   name?: string | null
   title?: string | null
   email?: string | null
-  phone?: string | null
   location?: string | null
   website?: string | null
   linkedin?: string | null
@@ -32,15 +31,23 @@ export interface CVData {
   experience?: CVEntry[] | null
 }
 
+export type NavLink = {
+  label: string
+  type?: 'route' | 'internal' | 'external' | null
+  route?: string | null
+  page?: { relationTo: string; value: { slug?: string | null } | number } | { slug?: string | null } | number | null
+  url?: string | null
+}
+
 export interface SiteSettingsData {
   siteName?: string | null
   navLogo?: MediaAsset
   tagline?: string | null
   email?: string | null
-  phone?: string | null
   linkedin?: string | null
   contactButtonLabel?: string | null
-  footerLinks?: { label: string; type?: 'internal' | 'external' | null; page?: { slug?: string | null } | number | null; url?: string | null }[] | null
+  navLinks?: NavLink[] | null
+  footerLinks?: NavLink[] | null
   openrouterApiKey?: string | null
   openrouterModel?: string | null
   openrouterTemperature?: number | null
@@ -48,20 +55,11 @@ export interface SiteSettingsData {
   openrouterSystemPrompt?: string | null
 }
 
-export interface CTAData {
-  label?: string | null
-  linkType?: 'internal' | 'external' | null
-  page?: { slug?: string | null } | number | null
-  href?: string | null
+export interface CTAData extends NavLink {
   style?: 'primary' | 'secondary' | null
 }
 
-export interface CTALinkData {
-  label?: string | null
-  linkType?: 'internal' | 'external' | null
-  page?: { slug?: string | null } | number | null
-  href?: string | null
-}
+export type CTALinkData = NavLink
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RichTextContent = any
@@ -170,7 +168,7 @@ export interface ProjectData {
   excerpt?: string | null
   coverImage?: MediaAsset
   tags?: { label?: string | null }[] | null
-  links?: { label?: string | null; linkType?: 'internal' | 'external' | null; page?: { slug?: string | null } | number | null; url?: string | null }[] | null
+  links?: NavLink[] | null
   challenge?: RichTextContent
   solution?: RichTextContent
   metrics?: { value?: string | null; label?: string | null }[] | null

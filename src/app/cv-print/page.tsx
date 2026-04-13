@@ -28,7 +28,6 @@ export default async function CVPrintPage() {
         )}
         <div className="cv-print-contact">
           {cv.email && <a href={`mailto:${cv.email}`}>{cv.email}</a>}
-          {cv.phone && <p>{cv.phone}</p>}
           {cv.linkedin && <p>{cv.linkedin}</p>}
         </div>
       </header>
