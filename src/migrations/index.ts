@@ -4,6 +4,7 @@ import * as migration_20260411_214333 from './20260411_214333';
 import * as migration_20260412_120000_openrouter_settings from './20260412_120000_openrouter_settings';
 import * as migration_20260412_123355 from './20260412_123355';
 import * as migration_20260412_150000_richtext_body_fields from './20260412_150000_richtext_body_fields';
+import * as migration_20260414_120000_unified_link_system from './20260414_120000_unified_link_system';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260412_150000_richtext_body_fields.up,
     down: migration_20260412_150000_richtext_body_fields.down,
     name: '20260412_150000_richtext_body_fields',
+  },
+  {
+    up: migration_20260414_120000_unified_link_system.up,
+    down: migration_20260414_120000_unified_link_system.down,
+    name: '20260414_120000_unified_link_system',
   },
 ];
